@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tienda – Registro de Ventas</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117; --surface: #1a1d27; --surface2: #22263a;
+    --accent: #f0c040; --accent2: #4ade80;
+    --danger: #f87171; --warn: #fb923c;
+    --text: #e8e8f0; --muted: #6b7280; --border: #2e3347;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+  header { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; gap: 12px; flex-wrap: wrap; }
+  header h1 { font-size: 1.05rem; font-weight: 800; letter-spacing: .04em; color: var(--accent); white-space: nowrap; }
+  header h1 span { color: var(--text); font-weight: 400; }
+  .header-stats { display: flex; gap: 10px; flex-wrap: wrap; }
+  .stat-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 5px 12px; font-family: 'DM Mono', monospace; font-size: .78rem; }
+  .stat-pill span { color: var(--accent); font-weight: 500; }
+  .header-btns { display: flex; gap: 8px; }
+  .hbtn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Syne', sans-serif; font-size: .72rem; font-weight: 600; padding: 5px 12px; border-radius: 8px; cursor: pointer; transition: all .15s; white-space: nowrap; }
+  .hbtn:hover { border-color: var(--accent); color: var(--accent); }
+
+  #alertBanner { display: none; background: linear-gradient(90deg,#7c2d12,#431407); border-bottom: 2px solid var(--warn); padding: 8px 24px; font-size: .82rem; color: #fef3c7; animation: pulse-bg 2s infinite; }
+  @keyframes pulse-bg { 0%,100%{opacity:1}50%{opacity:.82} }
+  #alertBanner strong { color: var(--warn); }
+
+  .container { display: grid; grid-template-columns: 1fr 310px; min-height: calc(100vh - 58px); }
+
+  .products-panel { padding: 20px 24px; border-right: 1px solid var(--border); }
+  .panel-title { font-size: .68rem; font-weight: 700; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; margin-bottom: 14px; }
+  .filter-bar { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .filter-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); font-family: 'Syne', sans-serif; font-size: .73rem; font-weight: 600; padding: 4px 12px; border-radius: 20px; cursor: pointer; transition: all .15s; }
+  .filter-btn.active, .filter-btn:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+
+  .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 13px; cursor: pointer; transition: transform .12s, border-color .12s, box-shadow .12s; position: relative; overflow: hidden; user-select: none; }
+  .product-card:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 4px 20px rgba(240,192,64,.12); }
+  .product-card:active { transform: scale(.97); }
+  .product-card.low-stock { border-color: var(--warn); }
+  .product-card.out-stock { border-color: var(--danger); opacity: .55; pointer-events: none; }
+  .card-name { font-size: .84rem; font-weight: 700; margin-bottom: 6px; line-height: 1.3; }
+  .card-sale-price { font-family: 'DM Mono', monospace; font-size: .88rem; color: var(--accent2); font-weight: 500; margin-bottom: 3px; }
+  .card-cost-price { font-family: 'DM Mono', monospace; font-size: .68rem; color: var(--muted); margin-bottom: 8px; }
+  .card-pack { font-size: .68rem; color: var(--muted); margin-bottom: 8px; }
+  .card-stock-bar { height: 3px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+  .card-stock-fill { height: 100%; border-radius: 2px; transition: width .3s; }
+  .card-stock-info { display: flex; justify-content: space-between; align-items: center; margin-top: 7px; }
+  .stock-count { font-family: 'DM Mono', monospace; font-size: .68rem; color: var(--muted); }
+  .stock-badge { font-size: .58rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+  .badge-ok  { background: rgba(74,222,128,.15); color: var(--accent2); }
+  .badge-low { background: rgba(251,146,60,.15); color: var(--warn); }
+  .badge-out { background: rgba(248,113,113,.15); color: var(--danger); }
+  .ripple { position: absolute; border-radius: 50%; background: rgba(240,192,64,.25); transform: scale(0); animation: ripple .4s linear; pointer-events: none; }
+  @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+
+  .sales-panel { background: var(--surface); display: flex; flex-direction: column; max-height: calc(100vh - 58px); position: sticky; top: 58px; }
+  .sales-header { padding: 16px 18px 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; }
+  .sales-header h2 { font-size: .88rem; font-weight: 700; }
+  .sales-date { font-family: 'DM Mono', monospace; font-size: .65rem; color: var(--muted); margin-top: 3px; }
+  .clear-btn { background: none; border: 1px solid var(--border); color: var(--muted); font-family: 'Syne', sans-serif; font-size: .68rem; padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: all .15s; }
+  .clear-btn:hover { border-color: var(--danger); color: var(--danger); }
+  .sales-list { flex: 1; overflow-y: auto; padding: 10px; }
+  .sales-list::-webkit-scrollbar { width: 3px; }
+  .sales-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .sale-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; border-radius: 8px; margin-bottom: 5px; background: var(--surface2); border: 1px solid var(--border); animation: slideIn .2s ease; }
+  @keyframes slideIn { from { opacity:0; transform: translateX(14px); } }
+  .sale-info { flex: 1; }
+  .sale-name { font-size: .78rem; font-weight: 600; }
+  .sale-time { font-family: 'DM Mono', monospace; font-size: .62rem; color: var(--muted); }
+  .sale-amount { font-family: 'DM Mono', monospace; font-size: .8rem; color: var(--accent2); font-weight: 500; }
+  .undo-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: .8rem; padding: 0 0 0 8px; transition: color .15s; }
+  .undo-btn:hover { color: var(--danger); }
+  .empty-state { text-align: center; padding: 36px 16px; color: var(--muted); font-size: .82rem; line-height: 1.7; }
+  .empty-state .icon { font-size: 2rem; margin-bottom: 8px; }
+  .sales-footer { padding: 14px 18px; border-top: 1px solid var(--border); }
+  .total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .total-label { font-size: .72rem; color: var(--muted); }
+  .total-value { font-family: 'DM Mono', monospace; font-size: 1.05rem; color: var(--accent); font-weight: 500; }
+  .footer-btns { display: flex; gap: 8px; }
+  .export-btn { flex: 1; background: var(--accent); color: #000; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: .78rem; padding: 9px; cursor: pointer; transition: opacity .15s; }
+  .export-btn:hover { opacity: .88; }
+  .history-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Syne', sans-serif; font-weight: 600; font-size: .78rem; padding: 9px 14px; border-radius: 8px; cursor: pointer; transition: all .15s; }
+  .history-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.75); z-index: 200; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 26px; width: 300px; animation: popIn .16s ease; }
+  @keyframes popIn { from { transform: scale(.92); opacity:0; } }
+  .modal h3 { font-size: .98rem; font-weight: 700; margin-bottom: 4px; }
+  .modal-meta { font-family: 'DM Mono', monospace; font-size: .72rem; color: var(--muted); margin-bottom: 18px; }
+  .modal-sell-price { color: var(--accent2); font-weight: 500; }
+  .modal label { font-size: .72rem; color: var(--muted); display: block; margin-bottom: 6px; }
+  .qty-control { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .qty-btn { width: 34px; height: 34px; border-radius: 8px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .12s; }
+  .qty-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .qty-display { font-family: 'DM Mono', monospace; font-size: 1.4rem; font-weight: 500; min-width: 28px; text-align: center; }
+  .modal-total { background: var(--surface2); border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; font-family: 'DM Mono', monospace; font-size: .88rem; margin-bottom: 18px; }
+  .modal-total span:last-child { color: var(--accent); font-weight: 500; }
+  .modal-actions { display: flex; gap: 8px; }
+  .btn-cancel { flex: 1; background: none; border: 1px solid var(--border); color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 600; font-size: .8rem; padding: 9px; border-radius: 8px; cursor: pointer; }
+  .btn-cancel:hover { border-color: var(--muted); color: var(--text); }
+  .btn-confirm { flex: 2; background: var(--accent2); border: none; color: #000; font-family: 'Syne', sans-serif; font-weight: 700; font-size: .8rem; padding: 9px; border-radius: 8px; cursor: pointer; }
+  .btn-confirm:hover { opacity: .88; }
+
+  .hist-modal { width: 480px; max-width: 95vw; max-height: 80vh; display: flex; flex-direction: column; }
+  .hist-modal h3 { margin-bottom: 14px; }
+  .hist-days { overflow-y: auto; flex: 1; }
+  .hist-day { margin-bottom: 10px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .hist-day-header { background: var(--surface2); padding: 9px 14px; display: flex; justify-content: space-between; cursor: pointer; font-size: .82rem; font-weight: 700; }
+  .hist-day-header span:last-child { font-family: 'DM Mono', monospace; color: var(--accent); }
+  .hist-day-body { display: none; padding: 8px 14px; }
+  .hist-day.open .hist-day-body { display: block; }
+  .hist-item { display: flex; justify-content: space-between; font-size: .75rem; padding: 4px 0; border-bottom: 1px solid var(--border); color: var(--muted); }
+  .hist-item:last-child { border: none; }
+  .hist-item span:last-child { font-family: 'DM Mono', monospace; color: var(--accent2); }
+
+  .reset-list-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border); }
+  .reset-list-item span { font-size: .8rem; font-weight: 600; }
+  .reset-input { width: 62px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 4px 8px; font-family: 'DM Mono', monospace; font-size: .82rem; text-align: center; }
+
+  @media (max-width: 700px) {
+    .container { grid-template-columns: 1fr; }
+    .sales-panel { position: static; max-height: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🛒 <span>Tienda /</span> Ventas</h1>
+  <div class="header-stats">
+    <div class="stat-pill">Hoy: <span id="statVentas">$0</span></div>
+    <div class="stat-pill">Ventas: <span id="statTx">0</span></div>
+  </div>
+  <div class="header-btns">
+    <button class="hbtn" onclick="openHistory()">📅 Historial</button>
+    <button class="hbtn" onclick="openResetModal()">⚙ Ajustar stock</button>
+  </div>
+</header>
+
+<div id="alertBanner">
+  ⚠️ <strong>Stock bajo:</strong> <span id="alertList"></span>
+</div>
+
+<div class="container">
+  <div class="products-panel">
+    <div class="panel-title">Productos — toca para registrar venta</div>
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterProducts('todos',this)">Todos</button>
+      <button class="filter-btn" onclick="filterProducts('ok',this)">✅ Con stock</button>
+      <button class="filter-btn" onclick="filterProducts('low',this)">⚠️ Bajo</button>
+    </div>
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+
+  <div class="sales-panel">
+    <div class="sales-header">
+      <div>
+        <h2>Ventas del día</h2>
+        <div class="sales-date" id="salesDate"></div>
+      </div>
+      <button class="clear-btn" onclick="clearSales()">Limpiar</button>
+    </div>
+    <div class="sales-list" id="salesList"></div>
+    <div class="sales-footer">
+      <div class="total-row">
+        <span class="total-label">TOTAL DEL DÍA</span>
+        <span class="total-value" id="totalDay">$0</span>
+      </div>
+      <div class="footer-btns">
+        <button class="history-btn" onclick="openHistory()">📅</button>
+        <button class="export-btn" onclick="exportCSV()">⬇ Exportar CSV</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal venta -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <h3 id="modalName"></h3>
+    <div class="modal-meta">Venta: <span class="modal-sell-price" id="modalSellPrice"></span> · Paq: <span id="modalCostPrice"></span></div>
+    <label>Cantidad a vender (unidades)</label>
+    <div class="qty-control">
+      <button class="qty-btn" onclick="changeQty(-1)">−</button>
+      <div class="qty-display" id="qtyDisplay">1</div>
+      <button class="qty-btn" onclick="changeQty(1)">+</button>
+    </div>
+    <div class="modal-total"><span>Total venta</span><span id="modalTotal">$0</span></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmSale()">✓ Registrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal historial -->
+<div class="modal-overlay" id="histOverlay" onclick="closeHist(event)">
+  <div class="modal hist-modal">
+    <h3>📅 Historial de ventas</h3>
+    <div class="hist-days" id="histDays"></div>
+    <div style="margin-top:14px"><button class="btn-cancel" style="width:100%" onclick="closeHist()">Cerrar</button></div>
+  </div>
+</div>
+
+<!-- Modal stock -->
+<div class="modal-overlay" id="resetOverlay" onclick="closeReset(event)">
+  <div class="modal" style="width:340px">
+    <h3 style="margin-bottom:8px">⚙ Ajustar Stock</h3>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px;line-height:1.5">Edita las unidades disponibles de cada producto. Úsalo cuando surtes la tienda.</p>
+    <div id="resetList" style="max-height:340px;overflow-y:auto;margin-bottom:16px"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeReset()">Cancelar</button>
+      <button class="btn-confirm" onclick="saveStock()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PRODUCTOS = [
+  { id:1,  nombre:"Papas Súper Ricas",   costo:20000, cantPkg:12,     venta:2000 },
+  { id:2,  nombre:"Barriletes",          costo:4390,  cantPkg:15,     venta:600  },
+  { id:3,  nombre:"Burbujas",            costo:11990, cantPkg:12,     venta:1200 },
+  { id:4,  nombre:"Choco Mini",          costo:17900, cantPkg:20,     venta:1500 },
+  { id:5,  nombre:"Chocorramo Mini",     costo:7900,  cantPkg:4,      venta:2500 },
+  { id:6,  nombre:"Chocorramo Miti",     costo:7900,  cantPkg:4,      venta:2500 },
+  { id:7,  nombre:"Club Social",         costo:4500,  cantPkg:6,      venta:1500 },
+  { id:8,  nombre:"Agua Cristal (paca)", costo:14000, cantPkg:24,     venta:1000 },
+  { id:9,  nombre:"Jugo Hit",            costo:6300,  cantPkg:6,      venta:2000 },
+  { id:10, nombre:"Jamón",               costo:9900,  cantPkg:"400g", venta:2500 },
+  { id:11, nombre:"Queso",               costo:9100,  cantPkg:"400g", venta:2500 },
+  { id:12, nombre:"Galletas MU",         costo:5490,  cantPkg:18,     venta:800  },
+  { id:13, nombre:"Oreo",                costo:6800,  cantPkg:6,      venta:2000 },
+  { id:14, nombre:"Gancitos",            costo:11490, cantPkg:6,      venta:2500 },
+  { id:15, nombre:"Bombón Bum",          costo:3700,  cantPkg:6,      venta:800  },
+  { id:16, nombre:"Sandwiches",          costo:0,     cantPkg:12,     venta:2500 },
+];
+
+const STOCK_INICIAL = {1:12,2:30,3:12,4:20,5:20,6:4,7:18,8:24,9:18,10:1,11:1,12:18,13:12,14:6,15:18,16:12};
+const TODAY = new Date().toISOString().slice(0,10);
+const fmt = n => '$' + Math.round(n).toLocaleString('es-CO');
+const timeStr = () => new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+
+// Storage
+function loadStock() {
+  try { const s = localStorage.getItem('t_stock'); if(s) return JSON.parse(s); } catch(e){}
+  const s = {...STOCK_INICIAL}; saveStockLS(s); return s;
+}
+function saveStockLS(s) { try { localStorage.setItem('t_stock', JSON.stringify(s)); } catch(e){} }
+function loadHistory() { try { const h = localStorage.getItem('t_hist'); if(h) return JSON.parse(h); } catch(e){} return {}; }
+function saveHistLS(h) { try { localStorage.setItem('t_hist', JSON.stringify(h)); } catch(e){} }
+
+let stock = loadStock();
+let history = loadHistory();
+if (!history[TODAY]) history[TODAY] = [];
+
+let currentFilter = 'todos';
+let modalProduct = null;
+let modalQty = 1;
+
+// Render productos
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  const list = PRODUCTOS.filter(p => {
+    const s = stock[p.id] ?? 0;
+    if (currentFilter === 'ok')  return s > 2;
+    if (currentFilter === 'low') return s <= 2 && s > 0;
+    return true;
+  });
+  grid.innerHTML = list.map(p => {
+    const s = stock[p.id] ?? 0;
+    const max = typeof p.cantPkg === 'number' ? p.cantPkg * 2 : 4;
+    const pct = Math.min((s / Math.max(max,1)) * 100, 100);
+    const bar = s<=0 ? '#f87171' : s<=2 ? '#fb923c' : '#4ade80';
+    const cls = s<=0 ? 'out-stock' : s<=2 ? 'low-stock' : '';
+    const bdg = s<=0 ? 'badge-out' : s<=2 ? 'badge-low' : 'badge-ok';
+    const btxt = s<=0 ? 'Agotado' : s<=2 ? '¡Poco!' : 'OK';
+    const pkg = typeof p.cantPkg === 'number' ? `${p.cantPkg} und/paq` : p.cantPkg;
+    return `<div class="product-card ${cls}" onclick="openModal(${p.id},event)">
+      <div class="card-name">${p.nombre}</div>
+      <div class="card-sale-price">${fmt(p.venta)} <small style="font-size:.63rem;color:var(--muted)">/und</small></div>
+      ${p.costo>0?`<div class="card-cost-price">Paq: ${fmt(p.costo)}</div>`:''}
+      <div class="card-pack">📦 ${pkg}</div>
+      <div class="card-stock-bar"><div class="card-stock-fill" style="width:${pct}%;background:${bar}"></div></div>
+      <div class="card-stock-info">
+        <span class="stock-count">${s} und</span>
+        <span class="stock-badge ${bdg}">${btxt}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterProducts(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts();
+}
+
+// Modal venta
+function openModal(id, e) {
+  modalProduct = PRODUCTOS.find(p => p.id === id);
+  modalQty = 1;
+  document.getElementById('modalName').textContent = modalProduct.nombre;
+  document.getElementById('modalSellPrice').textContent = fmt(modalProduct.venta);
+  document.getElementById('modalCostPrice').textContent = modalProduct.costo > 0 ? fmt(modalProduct.costo) : '—';
+  updateModal();
+  document.getElementById('modalOverlay').classList.add('open');
+  if (e) {
+    const card = e.currentTarget;
+    const r = document.createElement('span'); r.className = 'ripple';
+    const rect = card.getBoundingClientRect(), size = Math.max(rect.width, rect.height);
+    r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
+    card.appendChild(r); setTimeout(() => r.remove(), 400);
+  }
+}
+function closeModal(e) { if(e && e.target !== document.getElementById('modalOverlay')) return; document.getElementById('modalOverlay').classList.remove('open'); }
+function changeQty(d) { modalQty = Math.max(1, Math.min(stock[modalProduct.id]??0, modalQty+d)); updateModal(); }
+function updateModal() {
+  document.getElementById('qtyDisplay').textContent = modalQty;
+  document.getElementById('modalTotal').textContent = fmt(modalProduct.venta * modalQty);
+}
+
+// Registrar venta
+function confirmSale() {
+  if (!modalProduct) return;
+  stock[modalProduct.id] = (stock[modalProduct.id] ?? 0) - modalQty;
+  saveStockLS(stock);
+  history[TODAY].unshift({ id: Date.now(), nombre: modalProduct.nombre, qty: modalQty, venta: modalProduct.venta, total: modalProduct.venta * modalQty, hora: timeStr() });
+  saveHistLS(history);
+  document.getElementById('modalOverlay').classList.remove('open');
+  renderProducts(); renderSales(); updateStats(); checkAlerts();
+}
+
+// Ventas del día
+function renderSales() {
+  const list = document.getElementById('salesList');
+  const hoy = history[TODAY] || [];
+  if (!hoy.length) { list.innerHTML = `<div class="empty-state"><div class="icon">🧾</div>Toca un producto para<br>registrar una venta</div>`; return; }
+  list.innerHTML = hoy.map(s => `
+    <div class="sale-item">
+      <div class="sale-info">
+        <div class="sale-name">${s.nombre} ×${s.qty}</div>
+        <div class="sale-time">${s.hora}</div>
+      </div>
+      <div class="sale-amount">${fmt(s.total)}</div>
+      <button class="undo-btn" onclick="undoSale(${s.id})">↩</button>
+    </div>`).join('');
+}
+
+function undoSale(id) {
+  const idx = history[TODAY].findIndex(s => s.id === id);
+  if (idx === -1) return;
+  const sale = history[TODAY][idx];
+  const prod = PRODUCTOS.find(p => p.nombre === sale.nombre);
+  if (prod) { stock[prod.id] = (stock[prod.id]??0) + sale.qty; saveStockLS(stock); }
+  history[TODAY].splice(idx, 1); saveHistLS(history);
+  renderProducts(); renderSales(); updateStats(); checkAlerts();
+}
+
+function clearSales() {
+  const hoy = history[TODAY] || [];
+  if (!hoy.length) return;
+  if (!confirm('¿Limpiar ventas de hoy? El stock se restaura.')) return;
+  hoy.forEach(s => { const p = PRODUCTOS.find(x => x.nombre === s.nombre); if(p) stock[p.id] = (stock[p.id]??0)+s.qty; });
+  saveStockLS(stock); history[TODAY] = []; saveHistLS(history);
+  renderProducts(); renderSales(); updateStats(); checkAlerts();
+}
+
+function updateStats() {
+  const hoy = history[TODAY] || [];
+  const total = hoy.reduce((a,s) => a+s.total, 0);
+  document.getElementById('totalDay').textContent = fmt(total);
+  document.getElementById('statVentas').textContent = fmt(total);
+  document.getElementById('statTx').textContent = hoy.length;
+}
+
+function checkAlerts() {
+  const low = PRODUCTOS.filter(p => { const s=stock[p.id]??0; return s<=2&&s>0; });
+  const out = PRODUCTOS.filter(p => (stock[p.id]??0)<=0);
+  const banner = document.getElementById('alertBanner');
+  const msgs = [];
+  if (low.length) msgs.push(low.map(p=>`${p.nombre} (${stock[p.id]} und)`).join(', '));
+  if (out.length) msgs.push('<strong>AGOTADOS:</strong> '+out.map(p=>p.nombre).join(', '));
+  if (msgs.length) { document.getElementById('alertList').innerHTML = msgs.join(' · '); banner.style.display='block'; }
+  else banner.style.display='none';
+}
+
+// Historial
+function openHistory() {
+  const days = Object.keys(history).sort().reverse();
+  const container = document.getElementById('histDays');
+  if (!days.length) { container.innerHTML='<p style="text-align:center;color:var(--muted);padding:20px;font-size:.82rem">No hay ventas aún.</p>'; }
+  else container.innerHTML = days.map(d => {
+    const sales = history[d]||[];
+    const total = sales.reduce((a,s)=>a+s.total,0);
+    const [y,m,day] = d.split('-');
+    const label = `${day}/${m}/${y}`;
+    return `<div class="hist-day ${d===TODAY?'open':''}">
+      <div class="hist-day-header" onclick="this.parentElement.classList.toggle('open')">
+        <span>${d===TODAY?'📍 Hoy — ':''}${label}</span>
+        <span>${fmt(total)} · ${sales.length} ventas</span>
+      </div>
+      <div class="hist-day-body">
+        ${sales.map(s=>`<div class="hist-item"><span>${s.hora} · ${s.nombre} ×${s.qty}</span><span>${fmt(s.total)}</span></div>`).join('')||'<div class="hist-item"><span>Sin ventas</span><span>—</span></div>'}
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('histOverlay').classList.add('open');
+}
+function closeHist(e) { if(e&&e.target!==document.getElementById('histOverlay')) return; document.getElementById('histOverlay').classList.remove('open'); }
+
+// Ajustar stock
+function openResetModal() {
+  document.getElementById('resetList').innerHTML = PRODUCTOS.map(p => `
+    <div class="reset-list-item">
+      <span>${p.nombre}</span>
+      <input class="reset-input" type="number" id="rs_${p.id}" value="${stock[p.id]??0}" min="0">
+    </div>`).join('');
+  document.getElementById('resetOverlay').classList.add('open');
+}
+function closeReset(e) { if(e&&e.target!==document.getElementById('resetOverlay')) return; document.getElementById('resetOverlay').classList.remove('open'); }
+function saveStock() {
+  PRODUCTOS.forEach(p => { const v=parseInt(document.getElementById(`rs_${p.id}`)?.value)||0; stock[p.id]=v; });
+  saveStockLS(stock); document.getElementById('resetOverlay').classList.remove('open');
+  renderProducts(); checkAlerts();
+}
+
+// Exportar CSV
+function exportCSV() {
+  const hoy = history[TODAY]||[];
+  if (!hoy.length) { alert('No hay ventas hoy.'); return; }
+  let csv = 'Hora,Producto,Cantidad,Precio Venta,Total\n';
+  hoy.forEach(s => { csv += `${s.hora},"${s.nombre}",${s.qty},${s.venta},${s.total}\n`; });
+  csv += `\nTOTAL,,,,${hoy.reduce((a,s)=>a+s.total,0)}\n`;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
+  a.download = `ventas_${TODAY}.csv`; a.click();
+}
+
+document.getElementById('salesDate').textContent = new Date().toLocaleDateString('es-CO',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+renderProducts(); renderSales(); updateStats(); checkAlerts();
+</script>
+</body>
+</html>
