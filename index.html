@@ -222,31 +222,36 @@
 </div>
 
 <script>
+// ── PRODUCTOS ACTUALIZADOS ─────────────────────────────────
+// Eliminados: Papas Súper Ricas, Chocorramo Miti, Queso, Jamón
+// Actualizados: Sandwiches → $3.000, Paquetes → $2.000
+// Nuevos: Doritos $3.000, Todo Rico $3.000, Papas Margarita $2.500
 const PRODUCTOS = [
-  { id:1,  nombre:"Papas Súper Ricas",   costo:20000, cantPkg:12,     venta:2000 },
-  { id:2,  nombre:"Barriletes",          costo:4390,  cantPkg:15,     venta:600  },
-  { id:3,  nombre:"Burbujas",            costo:11990, cantPkg:12,     venta:1200 },
-  { id:4,  nombre:"Choco Mini",          costo:17900, cantPkg:20,     venta:1500 },
-  { id:5,  nombre:"Chocorramo Mini",     costo:7900,  cantPkg:4,      venta:2500 },
-  { id:6,  nombre:"Chocorramo Miti",     costo:7900,  cantPkg:4,      venta:2500 },
-  { id:7,  nombre:"Club Social",         costo:4500,  cantPkg:6,      venta:1500 },
-  { id:8,  nombre:"Agua Cristal (paca)", costo:14000, cantPkg:24,     venta:1000 },
-  { id:9,  nombre:"Jugo Hit",            costo:6300,  cantPkg:6,      venta:2000 },
-  { id:10, nombre:"Jamón",               costo:9900,  cantPkg:"400g", venta:2500 },
-  { id:11, nombre:"Queso",               costo:9100,  cantPkg:"400g", venta:2500 },
-  { id:12, nombre:"Galletas MU",         costo:5490,  cantPkg:18,     venta:800  },
-  { id:13, nombre:"Oreo",                costo:6800,  cantPkg:6,      venta:2000 },
-  { id:14, nombre:"Gancitos",            costo:11490, cantPkg:6,      venta:2500 },
-  { id:15, nombre:"Bombón Bum",          costo:3700,  cantPkg:6,      venta:800  },
-  { id:16, nombre:"Sandwiches",          costo:0,     cantPkg:12,     venta:2500 },
+  { id:1,  nombre:"Barriletes",        costo:4390,  cantPkg:15, venta:600  },
+  { id:2,  nombre:"Burbujas",          costo:11990, cantPkg:12, venta:1200 },
+  { id:3,  nombre:"Choco Mini",        costo:17900, cantPkg:20, venta:1500 },
+  { id:4,  nombre:"Chocorramo Mini",   costo:7900,  cantPkg:4,  venta:2500 },
+  { id:5,  nombre:"Club Social",       costo:4500,  cantPkg:6,  venta:1500 },
+  { id:6,  nombre:"Agua Cristal",      costo:14000, cantPkg:24, venta:1000 },
+  { id:7,  nombre:"Jugo Hit",          costo:6300,  cantPkg:6,  venta:2000 },
+  { id:8,  nombre:"Galletas MU",       costo:5490,  cantPkg:18, venta:800  },
+  { id:9,  nombre:"Oreo",              costo:6800,  cantPkg:6,  venta:2000 },
+  { id:10, nombre:"Gancitos",          costo:11490, cantPkg:6,  venta:2500 },
+  { id:11, nombre:"Bombón Bum",        costo:3700,  cantPkg:6,  venta:800  },
+  { id:12, nombre:"Sandwiches",        costo:0,     cantPkg:12, venta:3000 },
+  { id:13, nombre:"Doritos",           costo:0,     cantPkg:0,  venta:3000 },
+  { id:14, nombre:"Todo Rico",         costo:0,     cantPkg:0,  venta:3000 },
+  { id:15, nombre:"Papas Margarita",   costo:0,     cantPkg:0,  venta:2500 },
+  { id:16, nombre:"Paquetes (papas)",  costo:0,     cantPkg:36, venta:2000 },
 ];
 
-const STOCK_INICIAL = {1:12,2:30,3:12,4:20,5:20,6:4,7:18,8:24,9:18,10:1,11:1,12:18,13:12,14:6,15:18,16:12};
+// Stock inicial — los nuevos (Doritos, Todo Rico, Margarita) en 0 hasta que los ajustes
+const STOCK_INICIAL = {1:30,2:12,3:20,4:20,5:18,6:24,7:18,8:18,9:12,10:6,11:18,12:12,13:0,14:0,15:0,16:36};
+
 const TODAY = new Date().toISOString().slice(0,10);
 const fmt = n => '$' + Math.round(n).toLocaleString('es-CO');
 const timeStr = () => new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
 
-// Storage
 function loadStock() {
   try { const s = localStorage.getItem('t_stock'); if(s) return JSON.parse(s); } catch(e){}
   const s = {...STOCK_INICIAL}; saveStockLS(s); return s;
@@ -263,7 +268,6 @@ let currentFilter = 'todos';
 let modalProduct = null;
 let modalQty = 1;
 
-// Render productos
 function renderProducts() {
   const grid = document.getElementById('productsGrid');
   const list = PRODUCTOS.filter(p => {
@@ -274,13 +278,13 @@ function renderProducts() {
   });
   grid.innerHTML = list.map(p => {
     const s = stock[p.id] ?? 0;
-    const max = typeof p.cantPkg === 'number' ? p.cantPkg * 2 : 4;
+    const max = p.cantPkg > 0 ? p.cantPkg * 2 : 20;
     const pct = Math.min((s / Math.max(max,1)) * 100, 100);
     const bar = s<=0 ? '#f87171' : s<=2 ? '#fb923c' : '#4ade80';
     const cls = s<=0 ? 'out-stock' : s<=2 ? 'low-stock' : '';
     const bdg = s<=0 ? 'badge-out' : s<=2 ? 'badge-low' : 'badge-ok';
     const btxt = s<=0 ? 'Agotado' : s<=2 ? '¡Poco!' : 'OK';
-    const pkg = typeof p.cantPkg === 'number' ? `${p.cantPkg} und/paq` : p.cantPkg;
+    const pkg = p.cantPkg > 0 ? `${p.cantPkg} und/paq` : 'und sueltas';
     return `<div class="product-card ${cls}" onclick="openModal(${p.id},event)">
       <div class="card-name">${p.nombre}</div>
       <div class="card-sale-price">${fmt(p.venta)} <small style="font-size:.63rem;color:var(--muted)">/und</small></div>
@@ -302,7 +306,6 @@ function filterProducts(f, btn) {
   renderProducts();
 }
 
-// Modal venta
 function openModal(id, e) {
   modalProduct = PRODUCTOS.find(p => p.id === id);
   modalQty = 1;
@@ -326,7 +329,6 @@ function updateModal() {
   document.getElementById('modalTotal').textContent = fmt(modalProduct.venta * modalQty);
 }
 
-// Registrar venta
 function confirmSale() {
   if (!modalProduct) return;
   stock[modalProduct.id] = (stock[modalProduct.id] ?? 0) - modalQty;
@@ -337,7 +339,6 @@ function confirmSale() {
   renderProducts(); renderSales(); updateStats(); checkAlerts();
 }
 
-// Ventas del día
 function renderSales() {
   const list = document.getElementById('salesList');
   const hoy = history[TODAY] || [];
@@ -391,7 +392,6 @@ function checkAlerts() {
   else banner.style.display='none';
 }
 
-// Historial
 function openHistory() {
   const days = Object.keys(history).sort().reverse();
   const container = document.getElementById('histDays');
@@ -400,10 +400,9 @@ function openHistory() {
     const sales = history[d]||[];
     const total = sales.reduce((a,s)=>a+s.total,0);
     const [y,m,day] = d.split('-');
-    const label = `${day}/${m}/${y}`;
     return `<div class="hist-day ${d===TODAY?'open':''}">
       <div class="hist-day-header" onclick="this.parentElement.classList.toggle('open')">
-        <span>${d===TODAY?'📍 Hoy — ':''}${label}</span>
+        <span>${d===TODAY?'📍 Hoy — ':''}${day}/${m}/${y}</span>
         <span>${fmt(total)} · ${sales.length} ventas</span>
       </div>
       <div class="hist-day-body">
@@ -415,7 +414,6 @@ function openHistory() {
 }
 function closeHist(e) { if(e&&e.target!==document.getElementById('histOverlay')) return; document.getElementById('histOverlay').classList.remove('open'); }
 
-// Ajustar stock
 function openResetModal() {
   document.getElementById('resetList').innerHTML = PRODUCTOS.map(p => `
     <div class="reset-list-item">
@@ -431,7 +429,6 @@ function saveStock() {
   renderProducts(); checkAlerts();
 }
 
-// Exportar CSV
 function exportCSV() {
   const hoy = history[TODAY]||[];
   if (!hoy.length) { alert('No hay ventas hoy.'); return; }
