@@ -262,8 +262,8 @@
 const PRODUCTOS = [
   { id:1,  nombre:"Barriletes",        costo:4390,  cantPkg:15, venta:600  },
   { id:2,  nombre:"Burbujas",          costo:11990, cantPkg:12, venta:1200 },
-  { id:3,  nombre:"Choco Mini",        costo:17900, cantPkg:20, venta:1500 },
-  { id:4,  nombre:"Chocorramo Mini",   costo:7900,  cantPkg:4,  venta:2500 },
+  { id:3,  nombre:"Chocorramo Miti",   costo:7900,  cantPkg:4,  venta:2000 },
+  { id:4,  nombre:"Chocorramo Mini",   costo:7900,  cantPkg:4,  venta:1500 },
   { id:5,  nombre:"Club Social",       costo:4500,  cantPkg:6,  venta:1500 },
   { id:6,  nombre:"Agua Cristal",      costo:14000, cantPkg:24, venta:1000 },
   { id:7,  nombre:"Jugo Hit",          costo:6300,  cantPkg:6,  venta:2000 },
@@ -278,7 +278,7 @@ const PRODUCTOS = [
   { id:16, nombre:"Paquetes (papas)",  costo:0,     cantPkg:36, venta:2000 },
 ];
 
-const STOCK_INICIAL = {1:30,2:12,3:20,4:20,5:18,6:24,7:18,8:18,9:12,10:6,11:18,12:12,13:0,14:0,15:0,16:36};
+const STOCK_INICIAL = {1:30,2:12,3:4,4:4,5:18,6:24,7:18,8:18,9:12,10:6,11:18,12:12,13:0,14:0,15:0,16:36};
 const TODAY = new Date().toISOString().slice(0,10);
 const fmt = n => '$' + Math.round(n).toLocaleString('es-CO');
 const timeStr = () => new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
