@@ -15,117 +15,153 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
-  header { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; gap: 12px; flex-wrap: wrap; }
+  /* HEADER */
+  header { display: flex; align-items: center; justify-content: space-between; padding: 13px 22px; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; gap: 10px; flex-wrap: wrap; }
   header h1 { font-size: 1.05rem; font-weight: 800; letter-spacing: .04em; color: var(--accent); white-space: nowrap; }
   header h1 span { color: var(--text); font-weight: 400; }
-  .header-stats { display: flex; gap: 10px; flex-wrap: wrap; }
-  .stat-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 5px 12px; font-family: 'DM Mono', monospace; font-size: .78rem; }
+  .header-stats { display: flex; gap: 8px; flex-wrap: wrap; }
+  .stat-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 5px 11px; font-family: 'DM Mono', monospace; font-size: .76rem; }
   .stat-pill span { color: var(--accent); font-weight: 500; }
-  .header-btns { display: flex; gap: 8px; }
-  .hbtn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Syne', sans-serif; font-size: .72rem; font-weight: 600; padding: 5px 12px; border-radius: 8px; cursor: pointer; transition: all .15s; white-space: nowrap; }
+  .header-btns { display: flex; gap: 7px; }
+  .hbtn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Syne', sans-serif; font-size: .71rem; font-weight: 600; padding: 5px 11px; border-radius: 8px; cursor: pointer; transition: all .15s; white-space: nowrap; }
   .hbtn:hover { border-color: var(--accent); color: var(--accent); }
 
-  #alertBanner { display: none; background: linear-gradient(90deg,#7c2d12,#431407); border-bottom: 2px solid var(--warn); padding: 8px 24px; font-size: .82rem; color: #fef3c7; animation: pulse-bg 2s infinite; }
+  #alertBanner { display: none; background: linear-gradient(90deg,#7c2d12,#431407); border-bottom: 2px solid var(--warn); padding: 7px 22px; font-size: .8rem; color: #fef3c7; animation: pulse-bg 2s infinite; }
   @keyframes pulse-bg { 0%,100%{opacity:1}50%{opacity:.82} }
   #alertBanner strong { color: var(--warn); }
 
-  .container { display: grid; grid-template-columns: 1fr 310px; min-height: calc(100vh - 58px); }
+  /* LAYOUT */
+  .container { display: grid; grid-template-columns: 1fr 340px; min-height: calc(100vh - 56px); }
 
-  .products-panel { padding: 20px 24px; border-right: 1px solid var(--border); }
-  .panel-title { font-size: .68rem; font-weight: 700; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; margin-bottom: 14px; }
-  .filter-bar { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
-  .filter-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); font-family: 'Syne', sans-serif; font-size: .73rem; font-weight: 600; padding: 4px 12px; border-radius: 20px; cursor: pointer; transition: all .15s; }
+  /* PRODUCTS */
+  .products-panel { padding: 18px 22px; border-right: 1px solid var(--border); }
+  .panel-title { font-size: .67rem; font-weight: 700; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
+  .filter-bar { display: flex; gap: 7px; margin-bottom: 16px; flex-wrap: wrap; }
+  .filter-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); font-family: 'Syne', sans-serif; font-size: .72rem; font-weight: 600; padding: 4px 11px; border-radius: 20px; cursor: pointer; transition: all .15s; }
   .filter-btn.active, .filter-btn:hover { background: var(--accent); color: #000; border-color: var(--accent); }
-  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 9px; }
 
-  .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 13px; cursor: pointer; transition: transform .12s, border-color .12s, box-shadow .12s; position: relative; overflow: hidden; user-select: none; }
-  .product-card:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 4px 20px rgba(240,192,64,.12); }
+  .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; cursor: pointer; transition: transform .12s, border-color .12s, box-shadow .12s; position: relative; overflow: hidden; user-select: none; }
+  .product-card:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 4px 18px rgba(240,192,64,.12); }
   .product-card:active { transform: scale(.97); }
   .product-card.low-stock { border-color: var(--warn); }
-  .product-card.out-stock { border-color: var(--danger); opacity: .55; pointer-events: none; }
-  .card-name { font-size: .84rem; font-weight: 700; margin-bottom: 6px; line-height: 1.3; }
-  .card-sale-price { font-family: 'DM Mono', monospace; font-size: .88rem; color: var(--accent2); font-weight: 500; margin-bottom: 3px; }
-  .card-cost-price { font-family: 'DM Mono', monospace; font-size: .68rem; color: var(--muted); margin-bottom: 8px; }
-  .card-pack { font-size: .68rem; color: var(--muted); margin-bottom: 8px; }
+  .product-card.out-stock { border-color: var(--danger); opacity: .5; pointer-events: none; }
+  .product-card.in-cart { border-color: var(--accent2); background: rgba(74,222,128,.06); }
+
+  .card-name { font-size: .82rem; font-weight: 700; margin-bottom: 5px; line-height: 1.3; }
+  .card-sale-price { font-family: 'DM Mono', monospace; font-size: .86rem; color: var(--accent2); font-weight: 500; margin-bottom: 2px; }
+  .card-cost-price { font-family: 'DM Mono', monospace; font-size: .66rem; color: var(--muted); margin-bottom: 7px; }
   .card-stock-bar { height: 3px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
   .card-stock-fill { height: 100%; border-radius: 2px; transition: width .3s; }
-  .card-stock-info { display: flex; justify-content: space-between; align-items: center; margin-top: 7px; }
-  .stock-count { font-family: 'DM Mono', monospace; font-size: .68rem; color: var(--muted); }
-  .stock-badge { font-size: .58rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+  .card-stock-info { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
+  .stock-count { font-family: 'DM Mono', monospace; font-size: .66rem; color: var(--muted); }
+  .stock-badge { font-size: .57rem; font-weight: 700; padding: 2px 5px; border-radius: 4px; text-transform: uppercase; }
   .badge-ok  { background: rgba(74,222,128,.15); color: var(--accent2); }
   .badge-low { background: rgba(251,146,60,.15); color: var(--warn); }
   .badge-out { background: rgba(248,113,113,.15); color: var(--danger); }
+
+  /* Badge cantidad en carrito */
+  .cart-qty-badge { position: absolute; top: 8px; right: 8px; background: var(--accent); color: #000; font-family: 'DM Mono', monospace; font-size: .7rem; font-weight: 700; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
   .ripple { position: absolute; border-radius: 50%; background: rgba(240,192,64,.25); transform: scale(0); animation: ripple .4s linear; pointer-events: none; }
   @keyframes ripple { to { transform: scale(4); opacity: 0; } }
 
-  .sales-panel { background: var(--surface); display: flex; flex-direction: column; max-height: calc(100vh - 58px); position: sticky; top: 58px; }
-  .sales-header { padding: 16px 18px 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; }
-  .sales-header h2 { font-size: .88rem; font-weight: 700; }
-  .sales-date { font-family: 'DM Mono', monospace; font-size: .65rem; color: var(--muted); margin-top: 3px; }
-  .clear-btn { background: none; border: 1px solid var(--border); color: var(--muted); font-family: 'Syne', sans-serif; font-size: .68rem; padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: all .15s; }
-  .clear-btn:hover { border-color: var(--danger); color: var(--danger); }
-  .sales-list { flex: 1; overflow-y: auto; padding: 10px; }
-  .sales-list::-webkit-scrollbar { width: 3px; }
-  .sales-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-  .sale-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; border-radius: 8px; margin-bottom: 5px; background: var(--surface2); border: 1px solid var(--border); animation: slideIn .2s ease; }
-  @keyframes slideIn { from { opacity:0; transform: translateX(14px); } }
-  .sale-info { flex: 1; }
-  .sale-name { font-size: .78rem; font-weight: 600; }
-  .sale-time { font-family: 'DM Mono', monospace; font-size: .62rem; color: var(--muted); }
-  .sale-amount { font-family: 'DM Mono', monospace; font-size: .8rem; color: var(--accent2); font-weight: 500; }
-  .undo-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: .8rem; padding: 0 0 0 8px; transition: color .15s; }
-  .undo-btn:hover { color: var(--danger); }
-  .empty-state { text-align: center; padding: 36px 16px; color: var(--muted); font-size: .82rem; line-height: 1.7; }
-  .empty-state .icon { font-size: 2rem; margin-bottom: 8px; }
-  .sales-footer { padding: 14px 18px; border-top: 1px solid var(--border); }
-  .total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-  .total-label { font-size: .72rem; color: var(--muted); }
-  .total-value { font-family: 'DM Mono', monospace; font-size: 1.05rem; color: var(--accent); font-weight: 500; }
-  .footer-btns { display: flex; gap: 8px; }
-  .export-btn { flex: 1; background: var(--accent); color: #000; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: .78rem; padding: 9px; cursor: pointer; transition: opacity .15s; }
-  .export-btn:hover { opacity: .88; }
-  .history-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Syne', sans-serif; font-weight: 600; font-size: .78rem; padding: 9px 14px; border-radius: 8px; cursor: pointer; transition: all .15s; }
-  .history-btn:hover { border-color: var(--accent); color: var(--accent); }
+  /* CARRITO / PANEL DERECHO */
+  .cart-panel { background: var(--surface); display: flex; flex-direction: column; max-height: calc(100vh - 56px); position: sticky; top: 56px; }
 
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.75); z-index: 200; align-items: center; justify-content: center; }
+  /* Tabs */
+  .cart-tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .tab-btn { flex: 1; padding: 12px; font-family: 'Syne', sans-serif; font-size: .76rem; font-weight: 700; background: none; border: none; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .tab-content { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+  .tab-content.active { display: flex; }
+
+  /* Tab carrito */
+  .cart-header-info { padding: 12px 16px 8px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .cart-header-info span { font-size: .72rem; color: var(--muted); }
+  .cart-clear-btn { background: none; border: none; color: var(--muted); font-family: 'Syne', sans-serif; font-size: .68rem; cursor: pointer; transition: color .15s; }
+  .cart-clear-btn:hover { color: var(--danger); }
+
+  .cart-items { flex: 1; overflow-y: auto; padding: 10px 14px; }
+  .cart-items::-webkit-scrollbar { width: 3px; }
+  .cart-items::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .cart-item { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); animation: slideIn .18s ease; }
+  .cart-item:last-child { border: none; }
+  @keyframes slideIn { from { opacity:0; transform: translateX(10px); } }
+  .ci-name { flex: 1; font-size: .8rem; font-weight: 600; line-height: 1.2; }
+  .ci-price { font-family: 'DM Mono', monospace; font-size: .72rem; color: var(--muted); }
+  .ci-controls { display: flex; align-items: center; gap: 5px; }
+  .ci-btn { width: 22px; height: 22px; border-radius: 6px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-size: .85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .12s; }
+  .ci-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .ci-qty { font-family: 'DM Mono', monospace; font-size: .82rem; min-width: 18px; text-align: center; }
+  .ci-total { font-family: 'DM Mono', monospace; font-size: .78rem; color: var(--accent2); min-width: 52px; text-align: right; }
+  .ci-remove { background: none; border: none; color: var(--muted); cursor: pointer; font-size: .78rem; padding: 0 0 0 4px; transition: color .15s; }
+  .ci-remove:hover { color: var(--danger); }
+
+  .cart-empty { text-align: center; padding: 30px 16px; color: var(--muted); font-size: .8rem; line-height: 1.7; }
+  .cart-empty .icon { font-size: 1.8rem; margin-bottom: 8px; }
+
+  .cart-footer { padding: 14px 16px; border-top: 1px solid var(--border); }
+  .cart-subtotal { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .cart-subtotal-label { font-size: .72rem; color: var(--muted); }
+  .cart-subtotal-value { font-family: 'DM Mono', monospace; font-size: 1.2rem; color: var(--accent); font-weight: 500; }
+  .cobrar-btn { width: 100%; background: var(--accent2); border: none; border-radius: 10px; color: #000; font-family: 'Syne', sans-serif; font-weight: 800; font-size: .95rem; padding: 13px; cursor: pointer; transition: opacity .15s; letter-spacing: .02em; }
+  .cobrar-btn:hover { opacity: .88; }
+  .cobrar-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+  /* Tab historial */
+  .hist-list { flex: 1; overflow-y: auto; padding: 10px 14px; }
+  .hist-list::-webkit-scrollbar { width: 3px; }
+  .hist-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .hist-day { margin-bottom: 10px; }
+  .hist-day-label { font-size: .67rem; font-weight: 700; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; padding: 6px 0 4px; border-bottom: 1px solid var(--border); margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .hist-day-label span:last-child { font-family: 'DM Mono', monospace; color: var(--accent); }
+
+  .hist-order { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 9px 11px; margin-bottom: 6px; cursor: pointer; transition: border-color .12s; }
+  .hist-order:hover { border-color: var(--accent); }
+  .hist-order-header { display: flex; justify-content: space-between; align-items: center; }
+  .hist-order-num { font-size: .72rem; font-weight: 700; color: var(--muted); }
+  .hist-order-time { font-family: 'DM Mono', monospace; font-size: .68rem; color: var(--muted); }
+  .hist-order-total { font-family: 'DM Mono', monospace; font-size: .85rem; color: var(--accent2); font-weight: 500; }
+  .hist-order-items { margin-top: 7px; display: none; border-top: 1px solid var(--border); padding-top: 7px; }
+  .hist-order.open .hist-order-items { display: block; }
+  .hist-order-item { font-size: .72rem; color: var(--muted); padding: 2px 0; display: flex; justify-content: space-between; }
+  .hist-order-item span:last-child { font-family: 'DM Mono', monospace; color: var(--text); }
+
+  .hist-footer { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
+  .hist-footer-btn { flex: 1; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Syne', sans-serif; font-weight: 600; font-size: .74rem; padding: 8px; border-radius: 8px; cursor: pointer; transition: all .15s; }
+  .hist-footer-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Modal cobrar */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.78); z-index: 200; align-items: center; justify-content: center; }
   .modal-overlay.open { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 26px; width: 300px; animation: popIn .16s ease; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; width: 310px; animation: popIn .16s ease; }
   @keyframes popIn { from { transform: scale(.92); opacity:0; } }
-  .modal h3 { font-size: .98rem; font-weight: 700; margin-bottom: 4px; }
-  .modal-meta { font-family: 'DM Mono', monospace; font-size: .72rem; color: var(--muted); margin-bottom: 18px; }
-  .modal-sell-price { color: var(--accent2); font-weight: 500; }
-  .modal label { font-size: .72rem; color: var(--muted); display: block; margin-bottom: 6px; }
-  .qty-control { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
-  .qty-btn { width: 34px; height: 34px; border-radius: 8px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .12s; }
-  .qty-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .qty-display { font-family: 'DM Mono', monospace; font-size: 1.4rem; font-weight: 500; min-width: 28px; text-align: center; }
-  .modal-total { background: var(--surface2); border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; font-family: 'DM Mono', monospace; font-size: .88rem; margin-bottom: 18px; }
-  .modal-total span:last-child { color: var(--accent); font-weight: 500; }
+  .modal h3 { font-size: 1rem; font-weight: 700; margin-bottom: 14px; }
+  .cobro-items { margin-bottom: 14px; max-height: 200px; overflow-y: auto; }
+  .cobro-item { display: flex; justify-content: space-between; font-size: .78rem; padding: 5px 0; border-bottom: 1px solid var(--border); color: var(--muted); }
+  .cobro-item:last-child { border: none; }
+  .cobro-item span:last-child { font-family: 'DM Mono', monospace; color: var(--text); }
+  .cobro-total { background: var(--surface2); border-radius: 8px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .cobro-total-label { font-size: .8rem; font-weight: 700; }
+  .cobro-total-value { font-family: 'DM Mono', monospace; font-size: 1.4rem; color: var(--accent); font-weight: 500; }
   .modal-actions { display: flex; gap: 8px; }
-  .btn-cancel { flex: 1; background: none; border: 1px solid var(--border); color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 600; font-size: .8rem; padding: 9px; border-radius: 8px; cursor: pointer; }
-  .btn-cancel:hover { border-color: var(--muted); color: var(--text); }
-  .btn-confirm { flex: 2; background: var(--accent2); border: none; color: #000; font-family: 'Syne', sans-serif; font-weight: 700; font-size: .8rem; padding: 9px; border-radius: 8px; cursor: pointer; }
+  .btn-cancel { flex: 1; background: none; border: 1px solid var(--border); color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 600; font-size: .8rem; padding: 10px; border-radius: 8px; cursor: pointer; }
+  .btn-cancel:hover { color: var(--text); border-color: var(--muted); }
+  .btn-confirm { flex: 2; background: var(--accent2); border: none; color: #000; font-family: 'Syne', sans-serif; font-weight: 800; font-size: .85rem; padding: 10px; border-radius: 8px; cursor: pointer; }
   .btn-confirm:hover { opacity: .88; }
 
-  .hist-modal { width: 480px; max-width: 95vw; max-height: 80vh; display: flex; flex-direction: column; }
-  .hist-modal h3 { margin-bottom: 14px; }
-  .hist-days { overflow-y: auto; flex: 1; }
-  .hist-day { margin-bottom: 10px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-  .hist-day-header { background: var(--surface2); padding: 9px 14px; display: flex; justify-content: space-between; cursor: pointer; font-size: .82rem; font-weight: 700; }
-  .hist-day-header span:last-child { font-family: 'DM Mono', monospace; color: var(--accent); }
-  .hist-day-body { display: none; padding: 8px 14px; }
-  .hist-day.open .hist-day-body { display: block; }
-  .hist-item { display: flex; justify-content: space-between; font-size: .75rem; padding: 4px 0; border-bottom: 1px solid var(--border); color: var(--muted); }
-  .hist-item:last-child { border: none; }
-  .hist-item span:last-child { font-family: 'DM Mono', monospace; color: var(--accent2); }
-
+  /* Modal stock */
   .reset-list-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border); }
-  .reset-list-item span { font-size: .8rem; font-weight: 600; }
-  .reset-input { width: 62px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 4px 8px; font-family: 'DM Mono', monospace; font-size: .82rem; text-align: center; }
+  .reset-list-item span { font-size: .79rem; font-weight: 600; }
+  .reset-input { width: 60px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 4px 8px; font-family: 'DM Mono', monospace; font-size: .8rem; text-align: center; }
 
-  @media (max-width: 700px) {
+  @media (max-width: 720px) {
     .container { grid-template-columns: 1fr; }
-    .sales-panel { position: static; max-height: none; }
+    .cart-panel { position: static; max-height: none; }
   }
 </style>
 </head>
@@ -135,10 +171,9 @@
   <h1>🛒 <span>Tienda /</span> Ventas</h1>
   <div class="header-stats">
     <div class="stat-pill">Hoy: <span id="statVentas">$0</span></div>
-    <div class="stat-pill">Ventas: <span id="statTx">0</span></div>
+    <div class="stat-pill">Pedidos: <span id="statTx">0</span></div>
   </div>
   <div class="header-btns">
-    <button class="hbtn" onclick="openHistory()">📅 Historial</button>
     <button class="hbtn" onclick="openResetModal()">⚙ Ajustar stock</button>
   </div>
 </header>
@@ -148,8 +183,9 @@
 </div>
 
 <div class="container">
+  <!-- PRODUCTOS -->
   <div class="products-panel">
-    <div class="panel-title">Productos — toca para registrar venta</div>
+    <div class="panel-title">Toca un producto para agregarlo al pedido</div>
     <div class="filter-bar">
       <button class="filter-btn active" onclick="filterProducts('todos',this)">Todos</button>
       <button class="filter-btn" onclick="filterProducts('ok',this)">✅ Con stock</button>
@@ -158,61 +194,62 @@
     <div class="products-grid" id="productsGrid"></div>
   </div>
 
-  <div class="sales-panel">
-    <div class="sales-header">
-      <div>
-        <h2>Ventas del día</h2>
-        <div class="sales-date" id="salesDate"></div>
-      </div>
-      <button class="clear-btn" onclick="clearSales()">Limpiar</button>
+  <!-- CARRITO + HISTORIAL -->
+  <div class="cart-panel">
+    <div class="cart-tabs">
+      <button class="tab-btn active" onclick="switchTab('carrito',this)">🛒 Pedido actual</button>
+      <button class="tab-btn" onclick="switchTab('historial',this)">📅 Historial</button>
     </div>
-    <div class="sales-list" id="salesList"></div>
-    <div class="sales-footer">
-      <div class="total-row">
-        <span class="total-label">TOTAL DEL DÍA</span>
-        <span class="total-value" id="totalDay">$0</span>
+
+    <!-- TAB CARRITO -->
+    <div class="tab-content active" id="tab-carrito">
+      <div class="cart-header-info">
+        <span id="cartCount">0 productos</span>
+        <button class="cart-clear-btn" onclick="clearCart()">✕ Vaciar</button>
       </div>
-      <div class="footer-btns">
-        <button class="history-btn" onclick="openHistory()">📅</button>
-        <button class="export-btn" onclick="exportCSV()">⬇ Exportar CSV</button>
+      <div class="cart-items" id="cartItems">
+        <div class="cart-empty"><div class="icon">🛒</div>Toca productos para<br>armar el pedido</div>
+      </div>
+      <div class="cart-footer">
+        <div class="cart-subtotal">
+          <span class="cart-subtotal-label">TOTAL A COBRAR</span>
+          <span class="cart-subtotal-value" id="cartTotal">$0</span>
+        </div>
+        <button class="cobrar-btn" id="cobrarBtn" onclick="openCobrarModal()" disabled>Cobrar</button>
+      </div>
+    </div>
+
+    <!-- TAB HISTORIAL -->
+    <div class="tab-content" id="tab-historial">
+      <div class="hist-list" id="histList"></div>
+      <div class="hist-footer">
+        <button class="hist-footer-btn" onclick="exportCSV()">⬇ Exportar CSV</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Modal venta -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+<!-- Modal confirmación cobro -->
+<div class="modal-overlay" id="cobrarOverlay" onclick="closeCobrarModal(event)">
   <div class="modal">
-    <h3 id="modalName"></h3>
-    <div class="modal-meta">Venta: <span class="modal-sell-price" id="modalSellPrice"></span> · Paq: <span id="modalCostPrice"></span></div>
-    <label>Cantidad a vender (unidades)</label>
-    <div class="qty-control">
-      <button class="qty-btn" onclick="changeQty(-1)">−</button>
-      <div class="qty-display" id="qtyDisplay">1</div>
-      <button class="qty-btn" onclick="changeQty(1)">+</button>
+    <h3>✅ Confirmar cobro</h3>
+    <div class="cobro-items" id="cobroItems"></div>
+    <div class="cobro-total">
+      <span class="cobro-total-label">Total</span>
+      <span class="cobro-total-value" id="cobroTotal">$0</span>
     </div>
-    <div class="modal-total"><span>Total venta</span><span id="modalTotal">$0</span></div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
-      <button class="btn-confirm" onclick="confirmSale()">✓ Registrar</button>
+      <button class="btn-cancel" onclick="closeCobrarModal()">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmarCobro()">✓ Cobrado</button>
     </div>
   </div>
 </div>
 
-<!-- Modal historial -->
-<div class="modal-overlay" id="histOverlay" onclick="closeHist(event)">
-  <div class="modal hist-modal">
-    <h3>📅 Historial de ventas</h3>
-    <div class="hist-days" id="histDays"></div>
-    <div style="margin-top:14px"><button class="btn-cancel" style="width:100%" onclick="closeHist()">Cerrar</button></div>
-  </div>
-</div>
-
-<!-- Modal stock -->
+<!-- Modal ajustar stock -->
 <div class="modal-overlay" id="resetOverlay" onclick="closeReset(event)">
   <div class="modal" style="width:340px">
     <h3 style="margin-bottom:8px">⚙ Ajustar Stock</h3>
-    <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px;line-height:1.5">Edita las unidades disponibles de cada producto. Úsalo cuando surtes la tienda.</p>
+    <p style="font-size:.76rem;color:var(--muted);margin-bottom:14px;line-height:1.5">Edita las unidades disponibles. Úsalo cuando surtás la tienda.</p>
     <div id="resetList" style="max-height:340px;overflow-y:auto;margin-bottom:16px"></div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeReset()">Cancelar</button>
@@ -222,10 +259,6 @@
 </div>
 
 <script>
-// ── PRODUCTOS ACTUALIZADOS ─────────────────────────────────
-// Eliminados: Papas Súper Ricas, Chocorramo Miti, Queso, Jamón
-// Actualizados: Sandwiches → $3.000, Paquetes → $2.000
-// Nuevos: Doritos $3.000, Todo Rico $3.000, Papas Margarita $2.500
 const PRODUCTOS = [
   { id:1,  nombre:"Barriletes",        costo:4390,  cantPkg:15, venta:600  },
   { id:2,  nombre:"Burbujas",          costo:11990, cantPkg:12, venta:1200 },
@@ -245,29 +278,30 @@ const PRODUCTOS = [
   { id:16, nombre:"Paquetes (papas)",  costo:0,     cantPkg:36, venta:2000 },
 ];
 
-// Stock inicial — los nuevos (Doritos, Todo Rico, Margarita) en 0 hasta que los ajustes
 const STOCK_INICIAL = {1:30,2:12,3:20,4:20,5:18,6:24,7:18,8:18,9:12,10:6,11:18,12:12,13:0,14:0,15:0,16:36};
-
 const TODAY = new Date().toISOString().slice(0,10);
 const fmt = n => '$' + Math.round(n).toLocaleString('es-CO');
 const timeStr = () => new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
 
+// Storage
 function loadStock() {
   try { const s = localStorage.getItem('t_stock'); if(s) return JSON.parse(s); } catch(e){}
   const s = {...STOCK_INICIAL}; saveStockLS(s); return s;
 }
 function saveStockLS(s) { try { localStorage.setItem('t_stock', JSON.stringify(s)); } catch(e){} }
-function loadHistory() { try { const h = localStorage.getItem('t_hist'); if(h) return JSON.parse(h); } catch(e){} return {}; }
-function saveHistLS(h) { try { localStorage.setItem('t_hist', JSON.stringify(h)); } catch(e){} }
+function loadHistory() { try { const h = localStorage.getItem('t_hist2'); if(h) return JSON.parse(h); } catch(e){} return {}; }
+function saveHistLS(h) { try { localStorage.setItem('t_hist2', JSON.stringify(h)); } catch(e){} }
 
 let stock = loadStock();
 let history = loadHistory();
 if (!history[TODAY]) history[TODAY] = [];
 
+// Carrito: { id -> qty }
+let cart = {};
 let currentFilter = 'todos';
-let modalProduct = null;
-let modalQty = 1;
+let orderCounter = (history[TODAY]?.length || 0) + 1;
 
+// ── PRODUCTOS ─────────────────────────────────────────────
 function renderProducts() {
   const grid = document.getElementById('productsGrid');
   const list = PRODUCTOS.filter(p => {
@@ -278,18 +312,18 @@ function renderProducts() {
   });
   grid.innerHTML = list.map(p => {
     const s = stock[p.id] ?? 0;
+    const inCart = cart[p.id] || 0;
     const max = p.cantPkg > 0 ? p.cantPkg * 2 : 20;
     const pct = Math.min((s / Math.max(max,1)) * 100, 100);
     const bar = s<=0 ? '#f87171' : s<=2 ? '#fb923c' : '#4ade80';
-    const cls = s<=0 ? 'out-stock' : s<=2 ? 'low-stock' : '';
+    const cls = [s<=0 ? 'out-stock' : s<=2 ? 'low-stock' : '', inCart>0 ? 'in-cart' : ''].join(' ');
     const bdg = s<=0 ? 'badge-out' : s<=2 ? 'badge-low' : 'badge-ok';
     const btxt = s<=0 ? 'Agotado' : s<=2 ? '¡Poco!' : 'OK';
-    const pkg = p.cantPkg > 0 ? `${p.cantPkg} und/paq` : 'und sueltas';
-    return `<div class="product-card ${cls}" onclick="openModal(${p.id},event)">
+    return `<div class="product-card ${cls}" onclick="addToCart(${p.id}, event)">
+      ${inCart>0 ? `<div class="cart-qty-badge">${inCart}</div>` : ''}
       <div class="card-name">${p.nombre}</div>
-      <div class="card-sale-price">${fmt(p.venta)} <small style="font-size:.63rem;color:var(--muted)">/und</small></div>
+      <div class="card-sale-price">${fmt(p.venta)} <small style="font-size:.62rem;color:var(--muted)">/und</small></div>
       ${p.costo>0?`<div class="card-cost-price">Paq: ${fmt(p.costo)}</div>`:''}
-      <div class="card-pack">📦 ${pkg}</div>
       <div class="card-stock-bar"><div class="card-stock-fill" style="width:${pct}%;background:${bar}"></div></div>
       <div class="card-stock-info">
         <span class="stock-count">${s} und</span>
@@ -306,14 +340,15 @@ function filterProducts(f, btn) {
   renderProducts();
 }
 
-function openModal(id, e) {
-  modalProduct = PRODUCTOS.find(p => p.id === id);
-  modalQty = 1;
-  document.getElementById('modalName').textContent = modalProduct.nombre;
-  document.getElementById('modalSellPrice').textContent = fmt(modalProduct.venta);
-  document.getElementById('modalCostPrice').textContent = modalProduct.costo > 0 ? fmt(modalProduct.costo) : '—';
-  updateModal();
-  document.getElementById('modalOverlay').classList.add('open');
+// ── CARRITO ───────────────────────────────────────────────
+function addToCart(id, e) {
+  const prod = PRODUCTOS.find(p => p.id === id);
+  const available = (stock[prod.id] ?? 0) - (cart[prod.id] || 0);
+  if (available <= 0) return;
+  cart[prod.id] = (cart[prod.id] || 0) + 1;
+  renderProducts();
+  renderCart();
+  // Ripple
   if (e) {
     const card = e.currentTarget;
     const r = document.createElement('span'); r.className = 'ripple';
@@ -322,98 +357,194 @@ function openModal(id, e) {
     card.appendChild(r); setTimeout(() => r.remove(), 400);
   }
 }
-function closeModal(e) { if(e && e.target !== document.getElementById('modalOverlay')) return; document.getElementById('modalOverlay').classList.remove('open'); }
-function changeQty(d) { modalQty = Math.max(1, Math.min(stock[modalProduct.id]??0, modalQty+d)); updateModal(); }
-function updateModal() {
-  document.getElementById('qtyDisplay').textContent = modalQty;
-  document.getElementById('modalTotal').textContent = fmt(modalProduct.venta * modalQty);
+
+function changeCartQty(id, d) {
+  const prod = PRODUCTOS.find(p => p.id === id);
+  const available = stock[prod.id] ?? 0;
+  const newQty = (cart[id] || 0) + d;
+  if (newQty <= 0) { delete cart[id]; }
+  else if (newQty > available) { return; }
+  else { cart[id] = newQty; }
+  renderProducts();
+  renderCart();
 }
 
-function confirmSale() {
-  if (!modalProduct) return;
-  stock[modalProduct.id] = (stock[modalProduct.id] ?? 0) - modalQty;
-  saveStockLS(stock);
-  history[TODAY].unshift({ id: Date.now(), nombre: modalProduct.nombre, qty: modalQty, venta: modalProduct.venta, total: modalProduct.venta * modalQty, hora: timeStr() });
-  saveHistLS(history);
-  document.getElementById('modalOverlay').classList.remove('open');
-  renderProducts(); renderSales(); updateStats(); checkAlerts();
+function removeFromCart(id) {
+  delete cart[id];
+  renderProducts();
+  renderCart();
 }
 
-function renderSales() {
-  const list = document.getElementById('salesList');
-  const hoy = history[TODAY] || [];
-  if (!hoy.length) { list.innerHTML = `<div class="empty-state"><div class="icon">🧾</div>Toca un producto para<br>registrar una venta</div>`; return; }
-  list.innerHTML = hoy.map(s => `
-    <div class="sale-item">
-      <div class="sale-info">
-        <div class="sale-name">${s.nombre} ×${s.qty}</div>
-        <div class="sale-time">${s.hora}</div>
+function clearCart() {
+  cart = {};
+  renderProducts();
+  renderCart();
+}
+
+function renderCart() {
+  const container = document.getElementById('cartItems');
+  const items = Object.entries(cart);
+
+  if (!items.length) {
+    container.innerHTML = `<div class="cart-empty"><div class="icon">🛒</div>Toca productos para<br>armar el pedido</div>`;
+    document.getElementById('cartTotal').textContent = '$0';
+    document.getElementById('cartCount').textContent = '0 productos';
+    document.getElementById('cobrarBtn').disabled = true;
+    return;
+  }
+
+  let total = 0;
+  let totalQty = 0;
+  container.innerHTML = items.map(([id, qty]) => {
+    const prod = PRODUCTOS.find(p => p.id === parseInt(id));
+    const subtotal = prod.venta * qty;
+    total += subtotal;
+    totalQty += qty;
+    return `<div class="cart-item">
+      <div style="flex:1">
+        <div class="ci-name">${prod.nombre}</div>
+        <div class="ci-price">${fmt(prod.venta)} c/u</div>
       </div>
-      <div class="sale-amount">${fmt(s.total)}</div>
-      <button class="undo-btn" onclick="undoSale(${s.id})">↩</button>
-    </div>`).join('');
+      <div class="ci-controls">
+        <button class="ci-btn" onclick="changeCartQty(${prod.id},-1)">−</button>
+        <span class="ci-qty">${qty}</span>
+        <button class="ci-btn" onclick="changeCartQty(${prod.id},1)">+</button>
+      </div>
+      <span class="ci-total">${fmt(subtotal)}</span>
+      <button class="ci-remove" onclick="removeFromCart(${prod.id})">✕</button>
+    </div>`;
+  }).join('');
+
+  document.getElementById('cartTotal').textContent = fmt(total);
+  document.getElementById('cartCount').textContent = `${totalQty} und · ${items.length} productos`;
+  document.getElementById('cobrarBtn').disabled = false;
 }
 
-function undoSale(id) {
-  const idx = history[TODAY].findIndex(s => s.id === id);
-  if (idx === -1) return;
-  const sale = history[TODAY][idx];
-  const prod = PRODUCTOS.find(p => p.nombre === sale.nombre);
-  if (prod) { stock[prod.id] = (stock[prod.id]??0) + sale.qty; saveStockLS(stock); }
-  history[TODAY].splice(idx, 1); saveHistLS(history);
-  renderProducts(); renderSales(); updateStats(); checkAlerts();
+// ── COBRAR ────────────────────────────────────────────────
+function openCobrarModal() {
+  const items = Object.entries(cart);
+  if (!items.length) return;
+  let total = 0;
+  document.getElementById('cobroItems').innerHTML = items.map(([id, qty]) => {
+    const prod = PRODUCTOS.find(p => p.id === parseInt(id));
+    const sub = prod.venta * qty;
+    total += sub;
+    return `<div class="cobro-item"><span>${prod.nombre} ×${qty}</span><span>${fmt(sub)}</span></div>`;
+  }).join('');
+  document.getElementById('cobroTotal').textContent = fmt(total);
+  document.getElementById('cobrarOverlay').classList.add('open');
 }
 
-function clearSales() {
-  const hoy = history[TODAY] || [];
-  if (!hoy.length) return;
-  if (!confirm('¿Limpiar ventas de hoy? El stock se restaura.')) return;
-  hoy.forEach(s => { const p = PRODUCTOS.find(x => x.nombre === s.nombre); if(p) stock[p.id] = (stock[p.id]??0)+s.qty; });
-  saveStockLS(stock); history[TODAY] = []; saveHistLS(history);
-  renderProducts(); renderSales(); updateStats(); checkAlerts();
+function closeCobrarModal(e) {
+  if (e && e.target !== document.getElementById('cobrarOverlay')) return;
+  document.getElementById('cobrarOverlay').classList.remove('open');
 }
 
+function confirmarCobro() {
+  const items = Object.entries(cart);
+  if (!items.length) return;
+
+  // Descontar stock y armar registro
+  const orderItems = [];
+  let total = 0;
+  items.forEach(([id, qty]) => {
+    const prod = PRODUCTOS.find(p => p.id === parseInt(id));
+    stock[prod.id] = (stock[prod.id] ?? 0) - qty;
+    const sub = prod.venta * qty;
+    total += sub;
+    orderItems.push({ nombre: prod.nombre, qty, venta: prod.venta, subtotal: sub });
+  });
+  saveStockLS(stock);
+
+  // Registrar pedido en historial
+  const order = {
+    id: Date.now(),
+    num: orderCounter++,
+    hora: timeStr(),
+    items: orderItems,
+    total
+  };
+  if (!history[TODAY]) history[TODAY] = [];
+  history[TODAY].unshift(order);
+  saveHistLS(history);
+
+  // Limpiar carrito y cerrar modal
+  cart = {};
+  document.getElementById('cobrarOverlay').classList.remove('open');
+  renderProducts();
+  renderCart();
+  updateStats();
+  checkAlerts();
+  renderHistorial();
+  // Cambiar al tab carrito para ver que quedó limpio
+}
+
+// ── HISTORIAL ─────────────────────────────────────────────
+function renderHistorial() {
+  const container = document.getElementById('histList');
+  const days = Object.keys(history).sort().reverse();
+
+  if (!days.length || days.every(d => !history[d].length)) {
+    container.innerHTML = `<div class="cart-empty"><div class="icon">📅</div>No hay pedidos aún</div>`;
+    return;
+  }
+
+  container.innerHTML = days.filter(d => history[d]?.length).map(d => {
+    const orders = history[d];
+    const dayTotal = orders.reduce((a, o) => a + o.total, 0);
+    const [y,m,day] = d.split('-');
+    const label = d === TODAY ? `📍 Hoy (${day}/${m}/${y})` : `${day}/${m}/${y}`;
+    return `<div class="hist-day">
+      <div class="hist-day-label">
+        <span>${label}</span>
+        <span>${fmt(dayTotal)} · ${orders.length} pedidos</span>
+      </div>
+      ${orders.map(o => `
+        <div class="hist-order" onclick="this.classList.toggle('open')">
+          <div class="hist-order-header">
+            <div>
+              <div class="hist-order-num">Pedido #${o.num}</div>
+              <div class="hist-order-time">${o.hora}</div>
+            </div>
+            <div class="hist-order-total">${fmt(o.total)}</div>
+          </div>
+          <div class="hist-order-items">
+            ${o.items.map(i => `<div class="hist-order-item"><span>${i.nombre} ×${i.qty}</span><span>${fmt(i.subtotal)}</span></div>`).join('')}
+          </div>
+        </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  if (tab === 'historial') renderHistorial();
+}
+
+// ── STATS ─────────────────────────────────────────────────
 function updateStats() {
   const hoy = history[TODAY] || [];
-  const total = hoy.reduce((a,s) => a+s.total, 0);
-  document.getElementById('totalDay').textContent = fmt(total);
+  const total = hoy.reduce((a, o) => a + o.total, 0);
   document.getElementById('statVentas').textContent = fmt(total);
   document.getElementById('statTx').textContent = hoy.length;
 }
 
+// ── ALERTAS ───────────────────────────────────────────────
 function checkAlerts() {
   const low = PRODUCTOS.filter(p => { const s=stock[p.id]??0; return s<=2&&s>0; });
   const out = PRODUCTOS.filter(p => (stock[p.id]??0)<=0);
   const banner = document.getElementById('alertBanner');
   const msgs = [];
-  if (low.length) msgs.push(low.map(p=>`${p.nombre} (${stock[p.id]} und)`).join(', '));
+  if (low.length) msgs.push(low.map(p=>`${p.nombre} (${stock[p.id]})`).join(', '));
   if (out.length) msgs.push('<strong>AGOTADOS:</strong> '+out.map(p=>p.nombre).join(', '));
   if (msgs.length) { document.getElementById('alertList').innerHTML = msgs.join(' · '); banner.style.display='block'; }
   else banner.style.display='none';
 }
 
-function openHistory() {
-  const days = Object.keys(history).sort().reverse();
-  const container = document.getElementById('histDays');
-  if (!days.length) { container.innerHTML='<p style="text-align:center;color:var(--muted);padding:20px;font-size:.82rem">No hay ventas aún.</p>'; }
-  else container.innerHTML = days.map(d => {
-    const sales = history[d]||[];
-    const total = sales.reduce((a,s)=>a+s.total,0);
-    const [y,m,day] = d.split('-');
-    return `<div class="hist-day ${d===TODAY?'open':''}">
-      <div class="hist-day-header" onclick="this.parentElement.classList.toggle('open')">
-        <span>${d===TODAY?'📍 Hoy — ':''}${day}/${m}/${y}</span>
-        <span>${fmt(total)} · ${sales.length} ventas</span>
-      </div>
-      <div class="hist-day-body">
-        ${sales.map(s=>`<div class="hist-item"><span>${s.hora} · ${s.nombre} ×${s.qty}</span><span>${fmt(s.total)}</span></div>`).join('')||'<div class="hist-item"><span>Sin ventas</span><span>—</span></div>'}
-      </div>
-    </div>`;
-  }).join('');
-  document.getElementById('histOverlay').classList.add('open');
-}
-function closeHist(e) { if(e&&e.target!==document.getElementById('histOverlay')) return; document.getElementById('histOverlay').classList.remove('open'); }
-
+// ── AJUSTAR STOCK ─────────────────────────────────────────
 function openResetModal() {
   document.getElementById('resetList').innerHTML = PRODUCTOS.map(p => `
     <div class="reset-list-item">
@@ -429,19 +560,25 @@ function saveStock() {
   renderProducts(); checkAlerts();
 }
 
+// ── EXPORTAR CSV ──────────────────────────────────────────
 function exportCSV() {
-  const hoy = history[TODAY]||[];
-  if (!hoy.length) { alert('No hay ventas hoy.'); return; }
-  let csv = 'Hora,Producto,Cantidad,Precio Venta,Total\n';
-  hoy.forEach(s => { csv += `${s.hora},"${s.nombre}",${s.qty},${s.venta},${s.total}\n`; });
-  csv += `\nTOTAL,,,,${hoy.reduce((a,s)=>a+s.total,0)}\n`;
+  const hoy = history[TODAY] || [];
+  if (!hoy.length) { alert('No hay pedidos hoy.'); return; }
+  let csv = 'Pedido,Hora,Producto,Cantidad,Precio,Subtotal\n';
+  hoy.forEach(o => {
+    o.items.forEach(i => { csv += `#${o.num},${o.hora},"${i.nombre}",${i.qty},${i.venta},${i.subtotal}\n`; });
+  });
+  csv += `\nTOTAL DEL DÍA,,,,,${hoy.reduce((a,o)=>a+o.total,0)}\n`;
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
   a.download = `ventas_${TODAY}.csv`; a.click();
 }
 
-document.getElementById('salesDate').textContent = new Date().toLocaleDateString('es-CO',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-renderProducts(); renderSales(); updateStats(); checkAlerts();
+// ── INIT ──────────────────────────────────────────────────
+renderProducts();
+renderCart();
+updateStats();
+checkAlerts();
 </script>
 </body>
 </html>
