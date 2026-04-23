@@ -39,7 +39,7 @@
   .filter-bar { display: flex; gap: 7px; margin-bottom: 16px; flex-wrap: wrap; }
   .filter-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); font-family: 'Syne', sans-serif; font-size: .72rem; font-weight: 600; padding: 4px 11px; border-radius: 20px; cursor: pointer; transition: all .15s; }
   .filter-btn.active, .filter-btn:hover { background: var(--accent); color: #000; border-color: var(--accent); }
-  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 9px; }
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 11px; }
 
   .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; cursor: pointer; transition: transform .12s, border-color .12s, box-shadow .12s; position: relative; overflow: hidden; user-select: none; }
   .product-card:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 4px 18px rgba(240,192,64,.12); }
@@ -304,20 +304,22 @@
 
 <script>
 const PRODUCTOS = [
+  // ── MÁS VENDIDOS ──
+  { id:12, nombre:"Sandwiches",        costo:0,     cantPkg:12, venta:3000, top:true },
+  { id:7,  nombre:"Jugo Hit",          costo:6300,  cantPkg:6,  venta:2000, top:true },
+  { id:10, nombre:"Gancitos",          costo:11490, cantPkg:6,  venta:2500, top:true },
+  { id:14, nombre:"Todo Rico",         costo:0,     cantPkg:0,  venta:3000, top:true },
+  { id:13, nombre:"Doritos",           costo:0,     cantPkg:0,  venta:3000, top:true },
+  { id:15, nombre:"Papas Margarita",   costo:0,     cantPkg:0,  venta:2500, top:true },
+  { id:6,  nombre:"Agua Cristal",      costo:14000, cantPkg:24, venta:1000, top:true },
+  { id:2,  nombre:"Burbujas",          costo:11990, cantPkg:12, venta:1200, top:true },
+  // ── OTROS ──
   { id:1,  nombre:"Barriletes",        costo:4390,  cantPkg:15, venta:600  },
-  { id:2,  nombre:"Burbujas",          costo:11990, cantPkg:12, venta:1200 },
   { id:3,  nombre:"Chocorramo Miti",   costo:7900,  cantPkg:4,  venta:2000 },
   { id:4,  nombre:"Chocorramo Mini",   costo:7900,  cantPkg:4,  venta:1500 },
   { id:5,  nombre:"Club Social",       costo:4500,  cantPkg:6,  venta:1500 },
-  { id:6,  nombre:"Agua Cristal",      costo:14000, cantPkg:24, venta:1000 },
-  { id:7,  nombre:"Jugo Hit",          costo:6300,  cantPkg:6,  venta:2000 },
   { id:8,  nombre:"Galletas MU",       costo:5490,  cantPkg:18, venta:800  },
-  { id:10, nombre:"Gancitos",          costo:11490, cantPkg:6,  venta:2500 },
   { id:11, nombre:"Bombón Bum",        costo:3700,  cantPkg:6,  venta:800  },
-  { id:12, nombre:"Sandwiches",        costo:0,     cantPkg:12, venta:3000 },
-  { id:13, nombre:"Doritos",           costo:0,     cantPkg:0,  venta:3000 },
-  { id:14, nombre:"Todo Rico",         costo:0,     cantPkg:0,  venta:3000 },
-  { id:15, nombre:"Papas Margarita",   costo:0,     cantPkg:0,  venta:2500 },
   { id:16, nombre:"Paquetes (papas)",  costo:0,     cantPkg:36, venta:2000 },
 ];
 
@@ -347,13 +349,17 @@ let orderCounter = (history[TODAY]?.length || 0) + 1;
 // ── PRODUCTOS ─────────────────────────────────────────────
 function renderProducts() {
   const grid = document.getElementById('productsGrid');
-  const list = PRODUCTOS.filter(p => {
+  const filtered = PRODUCTOS.filter(p => {
     const s = stock[p.id] ?? 0;
     if (currentFilter === 'ok')  return s > 2;
     if (currentFilter === 'low') return s <= 2 && s > 0;
     return true;
   });
-  grid.innerHTML = list.map(p => {
+
+  const tops = filtered.filter(p => p.top);
+  const others = filtered.filter(p => !p.top);
+
+  function cardHTML(p) {
     const s = stock[p.id] ?? 0;
     const inCart = cart[p.id] || 0;
     const max = p.cantPkg > 0 ? p.cantPkg * 2 : 20;
@@ -365,15 +371,19 @@ function renderProducts() {
     return `<div class="product-card ${cls}" onclick="addToCart(${p.id}, event)">
       ${inCart>0 ? `<div class="cart-qty-badge">${inCart}</div>` : ''}
       <div class="card-name">${p.nombre}</div>
-      <div class="card-sale-price">${fmt(p.venta)} <small style="font-size:.62rem;color:var(--muted)">/und</small></div>
-      ${p.costo>0?`<div class="card-cost-price">Paq: ${fmt(p.costo)}</div>`:''}
+      <div class="card-sale-price">${fmt(p.venta)}</div>
       <div class="card-stock-bar"><div class="card-stock-fill" style="width:${pct}%;background:${bar}"></div></div>
       <div class="card-stock-info">
         <span class="stock-count">${s} und</span>
         <span class="stock-badge ${bdg}">${btxt}</span>
       </div>
     </div>`;
-  }).join('');
+  }
+
+  let html = '';
+  html += tops.map(cardHTML).join('');
+  html += others.map(cardHTML).join('');
+  grid.innerHTML = html;
 }
 
 function filterProducts(f, btn) {
