@@ -163,6 +163,16 @@
     .container { grid-template-columns: 1fr; }
     .cart-panel { position: static; max-height: none; }
   }
+  /* Payment modal extras */
+  .pay-method-btn { flex:1; padding:14px 10px; border-radius:10px; border:2px solid var(--border); background:var(--surface2); color:var(--text); font-family:"Syne",sans-serif; font-weight:700; font-size:.88rem; cursor:pointer; transition:all .15s; }
+  .pay-method-btn:hover { border-color:var(--accent2); color:var(--accent2); }
+  .pay-method-btn.nequi:hover { border-color:#a855f7; color:#a855f7; }
+  .billetes-grid { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:12px; }
+  .billete-btn { padding:7px 12px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--text); font-family:"DM Mono",monospace; font-size:.8rem; font-weight:500; cursor:pointer; transition:all .15s; }
+  .billete-btn:hover, .billete-btn.selected { background:var(--accent); color:#000; border-color:var(--accent); }
+  .cambio-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border); font-size:.8rem; color:var(--muted); }
+  .cambio-row:last-child { border:none; }
+  .cambio-highlight { background:rgba(74,222,128,.08); border-radius:6px; padding:8px 6px; margin-top:4px; color:var(--accent2); font-weight:700; }
 </style>
 </head>
 <body>
@@ -170,8 +180,10 @@
 <header>
   <h1>🛒 <span>Tienda /</span> Ventas</h1>
   <div class="header-stats">
-    <div class="stat-pill">Hoy: <span id="statVentas">$0</span></div>
+    <div class="stat-pill">Ventas: <span id="statVentas">$0</span></div>
     <div class="stat-pill">Pedidos: <span id="statTx">0</span></div>
+    <div class="stat-pill">💵 Efectivo: <span id="statEfectivo">$0</span></div>
+    <div class="stat-pill">🟣 Nequi: <span id="statNequi">$0</span></div>
   </div>
   <div class="header-btns">
     <button class="hbtn" onclick="openResetModal()">⚙ Ajustar stock</button>
@@ -229,18 +241,50 @@
   </div>
 </div>
 
-<!-- Modal confirmación cobro -->
+<!-- Modal pago -->
 <div class="modal-overlay" id="cobrarOverlay" onclick="closeCobrarModal(event)">
-  <div class="modal">
-    <h3>✅ Confirmar cobro</h3>
+  <div class="modal" style="width:340px">
+    <h3 style="margin-bottom:12px">💳 Cobrar pedido</h3>
     <div class="cobro-items" id="cobroItems"></div>
     <div class="cobro-total">
-      <span class="cobro-total-label">Total</span>
+      <span class="cobro-total-label">Total a cobrar</span>
       <span class="cobro-total-value" id="cobroTotal">$0</span>
     </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeCobrarModal()">Cancelar</button>
-      <button class="btn-confirm" onclick="confirmarCobro()">✓ Cobrado</button>
+
+    <!-- Step 1: método -->
+    <div id="stepMetodo">
+      <div style="display:flex;gap:10px;margin-bottom:8px">
+        <button class="pay-method-btn" onclick="selectMetodo('efectivo')">💵 Efectivo</button>
+        <button class="pay-method-btn nequi" onclick="selectMetodo('nequi')">🟣 Nequi</button>
+      </div>
+      <button class="btn-cancel" style="width:100%" onclick="closeCobrarModal()">Cancelar</button>
+    </div>
+
+    <!-- Step 2: efectivo -->
+    <div id="stepEfectivo" style="display:none">
+      <p style="font-size:.72rem;color:var(--muted);margin-bottom:10px">¿Con cuánto paga el cliente?</p>
+      <div class="billetes-grid" id="billetesGrid"></div>
+      <div id="cambioBox" style="display:none;background:var(--surface2);border-radius:8px;padding:10px 12px;margin-bottom:4px">
+        <div class="cambio-row"><span>Paga con</span><span id="pagaCon">$0</span></div>
+        <div class="cambio-row"><span>Total</span><span id="cambioTotal2">$0</span></div>
+        <div class="cambio-row cambio-highlight"><span>Cambio</span><span id="cambioValor">$0</span></div>
+      </div>
+      <div class="modal-actions" style="margin-top:10px">
+        <button class="btn-cancel" onclick="backToMetodo()">← Volver</button>
+        <button class="btn-confirm" id="btnConfirmEfectivo" onclick="confirmarCobro('efectivo')" disabled>✓ Confirmar</button>
+      </div>
+    </div>
+
+    <!-- Step 2: nequi -->
+    <div id="stepNequi" style="display:none">
+      <div style="text-align:center;padding:14px 0 18px">
+        <div style="font-size:2rem;margin-bottom:8px">🟣</div>
+        <div style="font-size:.82rem;color:var(--muted)">Registrar pago por Nequi</div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="backToMetodo()">← Volver</button>
+        <button class="btn-confirm" onclick="confirmarCobro('nequi')">✓ Confirmar</button>
+      </div>
     </div>
   </div>
 </div>
@@ -268,7 +312,6 @@ const PRODUCTOS = [
   { id:6,  nombre:"Agua Cristal",      costo:14000, cantPkg:24, venta:1000 },
   { id:7,  nombre:"Jugo Hit",          costo:6300,  cantPkg:6,  venta:2000 },
   { id:8,  nombre:"Galletas MU",       costo:5490,  cantPkg:18, venta:800  },
-  { id:9,  nombre:"Oreo",              costo:6800,  cantPkg:6,  venta:2000 },
   { id:10, nombre:"Gancitos",          costo:11490, cantPkg:6,  venta:2500 },
   { id:11, nombre:"Bombón Bum",        costo:3700,  cantPkg:6,  venta:800  },
   { id:12, nombre:"Sandwiches",        costo:0,     cantPkg:12, venta:3000 },
@@ -440,11 +483,54 @@ function closeCobrarModal(e) {
   document.getElementById('cobrarOverlay').classList.remove('open');
 }
 
-function confirmarCobro() {
+// ── PAGO ─────────────────────────────────────────────────
+let selectedPago = 0;
+
+function selectMetodo(metodo) {
+  document.getElementById('stepMetodo').style.display = 'none';
+  if (metodo === 'efectivo') {
+    document.getElementById('stepEfectivo').style.display = 'block';
+    renderBilletes();
+  } else {
+    document.getElementById('stepNequi').style.display = 'block';
+  }
+}
+
+function backToMetodo() {
+  document.getElementById('stepEfectivo').style.display = 'none';
+  document.getElementById('stepNequi').style.display = 'none';
+  document.getElementById('stepMetodo').style.display = 'block';
+  selectedPago = 0;
+  document.getElementById('cambioBox').style.display = 'none';
+  document.getElementById('btnConfirmEfectivo').disabled = true;
+  document.querySelectorAll('.billete-btn').forEach(b => b.classList.remove('selected'));
+}
+
+function renderBilletes() {
+  const billetes = [100000, 50000, 20000, 10000, 5000, 4000, 3000];
+  document.getElementById('billetesGrid').innerHTML = billetes.map(b =>
+    `<button class="billete-btn" onclick="selectBillete(${b})">${b>=1000?(b/1000)+'k':b}</button>`
+  ).join('');
+}
+
+function selectBillete(valor) {
+  selectedPago = valor;
+  document.querySelectorAll('.billete-btn').forEach(b => b.classList.remove('selected'));
+  event.target.classList.add('selected');
+  const total = parseInt(document.getElementById('cobroTotal').textContent.replace(/[^0-9]/g,''));
+  const cambio = valor - total;
+  document.getElementById('pagaCon').textContent = fmt(valor);
+  document.getElementById('cambioTotal2').textContent = fmt(total);
+  document.getElementById('cambioValor').textContent = cambio >= 0 ? fmt(cambio) : '⚠️ Insuficiente';
+  document.getElementById('cambioValor').style.color = cambio >= 0 ? 'var(--accent2)' : 'var(--danger)';
+  document.getElementById('cambioBox').style.display = 'block';
+  document.getElementById('btnConfirmEfectivo').disabled = cambio < 0;
+}
+
+function confirmarCobro(metodo) {
   const items = Object.entries(cart);
   if (!items.length) return;
 
-  // Descontar stock y armar registro
   const orderItems = [];
   let total = 0;
   items.forEach(([id, qty]) => {
@@ -456,27 +542,29 @@ function confirmarCobro() {
   });
   saveStockLS(stock);
 
-  // Registrar pedido en historial
   const order = {
     id: Date.now(),
     num: orderCounter++,
     hora: timeStr(),
     items: orderItems,
-    total
+    total,
+    metodo,
+    pagoCon: metodo === 'efectivo' ? selectedPago : null,
+    cambio: metodo === 'efectivo' ? selectedPago - total : null
   };
   if (!history[TODAY]) history[TODAY] = [];
   history[TODAY].unshift(order);
   saveHistLS(history);
 
-  // Limpiar carrito y cerrar modal
   cart = {};
+  selectedPago = 0;
   document.getElementById('cobrarOverlay').classList.remove('open');
+  backToMetodo();
   renderProducts();
   renderCart();
   updateStats();
   checkAlerts();
   renderHistorial();
-  // Cambiar al tab carrito para ver que quedó limpio
 }
 
 // ── HISTORIAL ─────────────────────────────────────────────
@@ -498,6 +586,10 @@ function renderHistorial() {
       <div class="hist-day-label">
         <span>${label}</span>
         <span>${fmt(dayTotal)} · ${orders.length} pedidos</span>
+      </div>
+      <div style="display:flex;gap:8px;padding:5px 0 8px;font-size:.7rem">
+        <span style="background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);border-radius:6px;padding:3px 9px;color:var(--accent2);font-family:'DM Mono',monospace">💵 ${fmt(orders.filter(o=>o.metodo==='efectivo').reduce((a,o)=>a+o.total,0))}</span>
+        <span style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2);border-radius:6px;padding:3px 9px;color:#c084fc;font-family:'DM Mono',monospace">🟣 ${fmt(orders.filter(o=>o.metodo==='nequi').reduce((a,o)=>a+o.total,0))}</span>
       </div>
       ${orders.map(o => `
         <div class="hist-order" onclick="this.classList.toggle('open')">
@@ -528,8 +620,12 @@ function switchTab(tab, btn) {
 function updateStats() {
   const hoy = history[TODAY] || [];
   const total = hoy.reduce((a, o) => a + o.total, 0);
+  const nequi = hoy.filter(o => o.metodo === 'nequi').reduce((a, o) => a + o.total, 0);
+  const efectivo = hoy.filter(o => o.metodo === 'efectivo').reduce((a, o) => a + o.total, 0);
   document.getElementById('statVentas').textContent = fmt(total);
   document.getElementById('statTx').textContent = hoy.length;
+  document.getElementById('statNequi').textContent = fmt(nequi);
+  document.getElementById('statEfectivo').textContent = fmt(efectivo);
 }
 
 // ── ALERTAS ───────────────────────────────────────────────
@@ -564,11 +660,17 @@ function saveStock() {
 function exportCSV() {
   const hoy = history[TODAY] || [];
   if (!hoy.length) { alert('No hay pedidos hoy.'); return; }
-  let csv = 'Pedido,Hora,Producto,Cantidad,Precio,Subtotal\n';
+  let csv = 'Pedido,Hora,Método,Producto,Cantidad,Precio,Subtotal\n';
   hoy.forEach(o => {
-    o.items.forEach(i => { csv += `#${o.num},${o.hora},"${i.nombre}",${i.qty},${i.venta},${i.subtotal}\n`; });
+    o.items.forEach(i => { csv += `#${o.num},${o.hora},${o.metodo},"${i.nombre}",${i.qty},${i.venta},${i.subtotal}\n`; });
   });
-  csv += `\nTOTAL DEL DÍA,,,,,${hoy.reduce((a,o)=>a+o.total,0)}\n`;
+  const total = hoy.reduce((a,o)=>a+o.total,0);
+  const nequi = hoy.filter(o=>o.metodo==='nequi').reduce((a,o)=>a+o.total,0);
+  const efectivo = hoy.filter(o=>o.metodo==='efectivo').reduce((a,o)=>a+o.total,0);
+  csv += `\nRESUMEN DEL DÍA\n`;
+  csv += `Total ventas,,,,,,${total}\n`;
+  csv += `Pagos en efectivo,,,,,,${efectivo}\n`;
+  csv += `Pagos por Nequi,,,,,,${nequi}\n`;
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
   a.download = `ventas_${TODAY}.csv`; a.click();
