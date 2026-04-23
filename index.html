@@ -517,7 +517,7 @@ function backToMetodo() {
 }
 
 function renderBilletes() {
-  const billetes = [100000, 50000, 20000, 10000, 5000, 4000, 3000];
+  const billetes = [100000, 50000, 20000, 10000, 5000, 4000, 3000, 2000];
   document.getElementById('billetesGrid').innerHTML = billetes.map(b =>
     `<button class="billete-btn" onclick="selectBillete(${b})">${b>=1000?(b/1000)+'k':b}</button>`
   ).join('');
