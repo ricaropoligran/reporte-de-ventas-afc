@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -15,165 +16,166 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
-  /* HEADER */
-  header { display: flex; align-items: center; justify-content: space-between; padding: 13px 22px; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; gap: 10px; flex-wrap: wrap; }
-  header h1 { font-size: 1.05rem; font-weight: 800; letter-spacing: .04em; color: var(--accent); white-space: nowrap; }
-  header h1 span { color: var(--text); font-weight: 400; }
-  .header-stats { display: flex; gap: 8px; flex-wrap: wrap; }
-  .stat-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 5px 11px; font-family: 'DM Mono', monospace; font-size: .76rem; }
-  .stat-pill span { color: var(--accent); font-weight: 500; }
-  .header-btns { display: flex; gap: 7px; }
-  .hbtn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Syne', sans-serif; font-size: .71rem; font-weight: 600; padding: 5px 11px; border-radius: 8px; cursor: pointer; transition: all .15s; white-space: nowrap; }
-  .hbtn:hover { border-color: var(--accent); color: var(--accent); }
+/* HEADER */
+header { display: flex; align-items: center; justify-content: space-between; padding: 13px 22px; background: var(–surface); border-bottom: 1px solid var(–border); position: sticky; top: 0; z-index: 100; gap: 10px; flex-wrap: wrap; }
+header h1 { font-size: 1.05rem; font-weight: 800; letter-spacing: .04em; color: var(–accent); white-space: nowrap; }
+header h1 span { color: var(–text); font-weight: 400; }
+.header-stats { display: flex; gap: 8px; flex-wrap: wrap; }
+.stat-pill { background: var(–surface2); border: 1px solid var(–border); border-radius: 8px; padding: 5px 11px; font-family: ‘DM Mono’, monospace; font-size: .76rem; }
+.stat-pill span { color: var(–accent); font-weight: 500; }
+.header-btns { display: flex; gap: 7px; }
+.hbtn { background: var(–surface2); border: 1px solid var(–border); color: var(–text); font-family: ‘Syne’, sans-serif; font-size: .71rem; font-weight: 600; padding: 5px 11px; border-radius: 8px; cursor: pointer; transition: all .15s; white-space: nowrap; }
+.hbtn:hover { border-color: var(–accent); color: var(–accent); }
 
-  #alertBanner { display: none; background: linear-gradient(90deg,#7c2d12,#431407); border-bottom: 2px solid var(--warn); padding: 7px 22px; font-size: .8rem; color: #fef3c7; animation: pulse-bg 2s infinite; }
-  @keyframes pulse-bg { 0%,100%{opacity:1}50%{opacity:.82} }
-  #alertBanner strong { color: var(--warn); }
+#alertBanner { display: none; background: linear-gradient(90deg,#7c2d12,#431407); border-bottom: 2px solid var(–warn); padding: 7px 22px; font-size: .8rem; color: #fef3c7; animation: pulse-bg 2s infinite; }
+@keyframes pulse-bg { 0%,100%{opacity:1}50%{opacity:.82} }
+#alertBanner strong { color: var(–warn); }
 
-  /* LAYOUT */
-  .container { display: grid; grid-template-columns: 1fr 340px; min-height: calc(100vh - 56px); }
+/* LAYOUT */
+.container { display: grid; grid-template-columns: 1fr 340px; min-height: calc(100vh - 56px); }
 
-  /* PRODUCTS */
-  .products-panel { padding: 18px 22px; border-right: 1px solid var(--border); }
-  .panel-title { font-size: .67rem; font-weight: 700; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
-  .filter-bar { display: flex; gap: 7px; margin-bottom: 16px; flex-wrap: wrap; }
-  .filter-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); font-family: 'Syne', sans-serif; font-size: .72rem; font-weight: 600; padding: 4px 11px; border-radius: 20px; cursor: pointer; transition: all .15s; }
-  .filter-btn.active, .filter-btn:hover { background: var(--accent); color: #000; border-color: var(--accent); }
-  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 11px; }
+/* PRODUCTS */
+.products-panel { padding: 18px 22px; border-right: 1px solid var(–border); }
+.panel-title { font-size: .67rem; font-weight: 700; letter-spacing: .14em; color: var(–muted); text-transform: uppercase; margin-bottom: 12px; }
+.filter-bar { display: flex; gap: 7px; margin-bottom: 16px; flex-wrap: wrap; }
+.filter-btn { background: var(–surface2); border: 1px solid var(–border); color: var(–muted); font-family: ‘Syne’, sans-serif; font-size: .72rem; font-weight: 600; padding: 4px 11px; border-radius: 20px; cursor: pointer; transition: all .15s; }
+.filter-btn.active, .filter-btn:hover { background: var(–accent); color: #000; border-color: var(–accent); }
+.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 11px; }
 
-  .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; cursor: pointer; transition: transform .12s, border-color .12s, box-shadow .12s; position: relative; overflow: hidden; user-select: none; }
-  .product-card:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 4px 18px rgba(240,192,64,.12); }
-  .product-card:active { transform: scale(.97); }
-  .product-card.low-stock { border-color: var(--warn); }
-  .product-card.out-stock { border-color: var(--danger); opacity: .5; pointer-events: none; }
-  .product-card.in-cart { border-color: var(--accent2); background: rgba(74,222,128,.06); }
+.product-card { background: var(–surface); border: 1px solid var(–border); border-radius: 10px; padding: 12px; cursor: pointer; transition: transform .12s, border-color .12s, box-shadow .12s; position: relative; overflow: hidden; user-select: none; }
+.product-card:hover { transform: translateY(-2px); border-color: var(–accent); box-shadow: 0 4px 18px rgba(240,192,64,.12); }
+.product-card:active { transform: scale(.97); }
+.product-card.low-stock { border-color: var(–warn); }
+.product-card.out-stock { border-color: var(–danger); opacity: .5; pointer-events: none; }
+.product-card.in-cart { border-color: var(–accent2); background: rgba(74,222,128,.06); }
 
-  .card-name { font-size: .82rem; font-weight: 700; margin-bottom: 5px; line-height: 1.3; }
-  .card-sale-price { font-family: 'DM Mono', monospace; font-size: .86rem; color: var(--accent2); font-weight: 500; margin-bottom: 2px; }
-  .card-cost-price { font-family: 'DM Mono', monospace; font-size: .66rem; color: var(--muted); margin-bottom: 7px; }
-  .card-stock-bar { height: 3px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
-  .card-stock-fill { height: 100%; border-radius: 2px; transition: width .3s; }
-  .card-stock-info { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
-  .stock-count { font-family: 'DM Mono', monospace; font-size: .66rem; color: var(--muted); }
-  .stock-badge { font-size: .57rem; font-weight: 700; padding: 2px 5px; border-radius: 4px; text-transform: uppercase; }
-  .badge-ok  { background: rgba(74,222,128,.15); color: var(--accent2); }
-  .badge-low { background: rgba(251,146,60,.15); color: var(--warn); }
-  .badge-out { background: rgba(248,113,113,.15); color: var(--danger); }
+.card-name { font-size: .82rem; font-weight: 700; margin-bottom: 5px; line-height: 1.3; }
+.card-sale-price { font-family: ‘DM Mono’, monospace; font-size: .86rem; color: var(–accent2); font-weight: 500; margin-bottom: 2px; }
+.card-cost-price { font-family: ‘DM Mono’, monospace; font-size: .66rem; color: var(–muted); margin-bottom: 7px; }
+.card-stock-bar { height: 3px; background: var(–surface2); border-radius: 2px; overflow: hidden; }
+.card-stock-fill { height: 100%; border-radius: 2px; transition: width .3s; }
+.card-stock-info { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
+.stock-count { font-family: ‘DM Mono’, monospace; font-size: .66rem; color: var(–muted); }
+.stock-badge { font-size: .57rem; font-weight: 700; padding: 2px 5px; border-radius: 4px; text-transform: uppercase; }
+.badge-ok  { background: rgba(74,222,128,.15); color: var(–accent2); }
+.badge-low { background: rgba(251,146,60,.15); color: var(–warn); }
+.badge-out { background: rgba(248,113,113,.15); color: var(–danger); }
 
-  /* Badge cantidad en carrito */
-  .cart-qty-badge { position: absolute; top: 8px; right: 8px; background: var(--accent); color: #000; font-family: 'DM Mono', monospace; font-size: .7rem; font-weight: 700; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+/* Badge cantidad en carrito */
+.cart-qty-badge { position: absolute; top: 8px; right: 8px; background: var(–accent); color: #000; font-family: ‘DM Mono’, monospace; font-size: .7rem; font-weight: 700; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-  .ripple { position: absolute; border-radius: 50%; background: rgba(240,192,64,.25); transform: scale(0); animation: ripple .4s linear; pointer-events: none; }
-  @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+.ripple { position: absolute; border-radius: 50%; background: rgba(240,192,64,.25); transform: scale(0); animation: ripple .4s linear; pointer-events: none; }
+@keyframes ripple { to { transform: scale(4); opacity: 0; } }
 
-  /* CARRITO / PANEL DERECHO */
-  .cart-panel { background: var(--surface); display: flex; flex-direction: column; max-height: calc(100vh - 56px); position: sticky; top: 56px; }
+/* CARRITO / PANEL DERECHO */
+.cart-panel { background: var(–surface); display: flex; flex-direction: column; max-height: calc(100vh - 56px); position: sticky; top: 56px; }
 
-  /* Tabs */
-  .cart-tabs { display: flex; border-bottom: 1px solid var(--border); }
-  .tab-btn { flex: 1; padding: 12px; font-family: 'Syne', sans-serif; font-size: .76rem; font-weight: 700; background: none; border: none; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; }
-  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+/* Tabs */
+.cart-tabs { display: flex; border-bottom: 1px solid var(–border); }
+.tab-btn { flex: 1; padding: 12px; font-family: ‘Syne’, sans-serif; font-size: .76rem; font-weight: 700; background: none; border: none; color: var(–muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; }
+.tab-btn.active { color: var(–accent); border-bottom-color: var(–accent); }
 
-  .tab-content { display: none; flex: 1; flex-direction: column; overflow: hidden; }
-  .tab-content.active { display: flex; }
+.tab-content { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+.tab-content.active { display: flex; }
 
-  /* Tab carrito */
-  .cart-header-info { padding: 12px 16px 8px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-  .cart-header-info span { font-size: .72rem; color: var(--muted); }
-  .cart-clear-btn { background: none; border: none; color: var(--muted); font-family: 'Syne', sans-serif; font-size: .68rem; cursor: pointer; transition: color .15s; }
-  .cart-clear-btn:hover { color: var(--danger); }
+/* Tab carrito */
+.cart-header-info { padding: 12px 16px 8px; border-bottom: 1px solid var(–border); display: flex; justify-content: space-between; align-items: center; }
+.cart-header-info span { font-size: .72rem; color: var(–muted); }
+.cart-clear-btn { background: none; border: none; color: var(–muted); font-family: ‘Syne’, sans-serif; font-size: .68rem; cursor: pointer; transition: color .15s; }
+.cart-clear-btn:hover { color: var(–danger); }
 
-  .cart-items { flex: 1; overflow-y: auto; padding: 10px 14px; }
-  .cart-items::-webkit-scrollbar { width: 3px; }
-  .cart-items::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.cart-items { flex: 1; overflow-y: auto; padding: 10px 14px; }
+.cart-items::-webkit-scrollbar { width: 3px; }
+.cart-items::-webkit-scrollbar-thumb { background: var(–border); border-radius: 2px; }
 
-  .cart-item { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); animation: slideIn .18s ease; }
-  .cart-item:last-child { border: none; }
-  @keyframes slideIn { from { opacity:0; transform: translateX(10px); } }
-  .ci-name { flex: 1; font-size: .8rem; font-weight: 600; line-height: 1.2; }
-  .ci-price { font-family: 'DM Mono', monospace; font-size: .72rem; color: var(--muted); }
-  .ci-controls { display: flex; align-items: center; gap: 5px; }
-  .ci-btn { width: 22px; height: 22px; border-radius: 6px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-size: .85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .12s; }
-  .ci-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .ci-qty { font-family: 'DM Mono', monospace; font-size: .82rem; min-width: 18px; text-align: center; }
-  .ci-total { font-family: 'DM Mono', monospace; font-size: .78rem; color: var(--accent2); min-width: 52px; text-align: right; }
-  .ci-remove { background: none; border: none; color: var(--muted); cursor: pointer; font-size: .78rem; padding: 0 0 0 4px; transition: color .15s; }
-  .ci-remove:hover { color: var(--danger); }
+.cart-item { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(–border); animation: slideIn .18s ease; }
+.cart-item:last-child { border: none; }
+@keyframes slideIn { from { opacity:0; transform: translateX(10px); } }
+.ci-name { flex: 1; font-size: .8rem; font-weight: 600; line-height: 1.2; }
+.ci-price { font-family: ‘DM Mono’, monospace; font-size: .72rem; color: var(–muted); }
+.ci-controls { display: flex; align-items: center; gap: 5px; }
+.ci-btn { width: 22px; height: 22px; border-radius: 6px; background: var(–surface2); border: 1px solid var(–border); color: var(–text); font-size: .85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .12s; }
+.ci-btn:hover { border-color: var(–accent); color: var(–accent); }
+.ci-qty { font-family: ‘DM Mono’, monospace; font-size: .82rem; min-width: 18px; text-align: center; }
+.ci-total { font-family: ‘DM Mono’, monospace; font-size: .78rem; color: var(–accent2); min-width: 52px; text-align: right; }
+.ci-remove { background: none; border: none; color: var(–muted); cursor: pointer; font-size: .78rem; padding: 0 0 0 4px; transition: color .15s; }
+.ci-remove:hover { color: var(–danger); }
 
-  .cart-empty { text-align: center; padding: 30px 16px; color: var(--muted); font-size: .8rem; line-height: 1.7; }
-  .cart-empty .icon { font-size: 1.8rem; margin-bottom: 8px; }
+.cart-empty { text-align: center; padding: 30px 16px; color: var(–muted); font-size: .8rem; line-height: 1.7; }
+.cart-empty .icon { font-size: 1.8rem; margin-bottom: 8px; }
 
-  .cart-footer { padding: 14px 16px; border-top: 1px solid var(--border); }
-  .cart-subtotal { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .cart-subtotal-label { font-size: .72rem; color: var(--muted); }
-  .cart-subtotal-value { font-family: 'DM Mono', monospace; font-size: 1.2rem; color: var(--accent); font-weight: 500; }
-  .cobrar-btn { width: 100%; background: var(--accent2); border: none; border-radius: 10px; color: #000; font-family: 'Syne', sans-serif; font-weight: 800; font-size: .95rem; padding: 13px; cursor: pointer; transition: opacity .15s; letter-spacing: .02em; }
-  .cobrar-btn:hover { opacity: .88; }
-  .cobrar-btn:disabled { opacity: .35; cursor: not-allowed; }
+.cart-footer { padding: 14px 16px; border-top: 1px solid var(–border); }
+.cart-subtotal { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.cart-subtotal-label { font-size: .72rem; color: var(–muted); }
+.cart-subtotal-value { font-family: ‘DM Mono’, monospace; font-size: 1.2rem; color: var(–accent); font-weight: 500; }
+.cobrar-btn { width: 100%; background: var(–accent2); border: none; border-radius: 10px; color: #000; font-family: ‘Syne’, sans-serif; font-weight: 800; font-size: .95rem; padding: 13px; cursor: pointer; transition: opacity .15s; letter-spacing: .02em; }
+.cobrar-btn:hover { opacity: .88; }
+.cobrar-btn:disabled { opacity: .35; cursor: not-allowed; }
 
-  /* Tab historial */
-  .hist-list { flex: 1; overflow-y: auto; padding: 10px 14px; }
-  .hist-list::-webkit-scrollbar { width: 3px; }
-  .hist-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+/* Tab historial */
+.hist-list { flex: 1; overflow-y: auto; padding: 10px 14px; }
+.hist-list::-webkit-scrollbar { width: 3px; }
+.hist-list::-webkit-scrollbar-thumb { background: var(–border); border-radius: 2px; }
 
-  .hist-day { margin-bottom: 10px; }
-  .hist-day-label { font-size: .67rem; font-weight: 700; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; padding: 6px 0 4px; border-bottom: 1px solid var(--border); margin-bottom: 6px; display: flex; justify-content: space-between; }
-  .hist-day-label span:last-child { font-family: 'DM Mono', monospace; color: var(--accent); }
+.hist-day { margin-bottom: 10px; }
+.hist-day-label { font-size: .67rem; font-weight: 700; letter-spacing: .1em; color: var(–muted); text-transform: uppercase; padding: 6px 0 4px; border-bottom: 1px solid var(–border); margin-bottom: 6px; display: flex; justify-content: space-between; }
+.hist-day-label span:last-child { font-family: ‘DM Mono’, monospace; color: var(–accent); }
 
-  .hist-order { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 9px 11px; margin-bottom: 6px; cursor: pointer; transition: border-color .12s; }
-  .hist-order:hover { border-color: var(--accent); }
-  .hist-order-header { display: flex; justify-content: space-between; align-items: center; }
-  .hist-order-num { font-size: .72rem; font-weight: 700; color: var(--muted); }
-  .hist-order-time { font-family: 'DM Mono', monospace; font-size: .68rem; color: var(--muted); }
-  .hist-order-total { font-family: 'DM Mono', monospace; font-size: .85rem; color: var(--accent2); font-weight: 500; }
-  .hist-order-items { margin-top: 7px; display: none; border-top: 1px solid var(--border); padding-top: 7px; }
-  .hist-order.open .hist-order-items { display: block; }
-  .hist-order-item { font-size: .72rem; color: var(--muted); padding: 2px 0; display: flex; justify-content: space-between; }
-  .hist-order-item span:last-child { font-family: 'DM Mono', monospace; color: var(--text); }
+.hist-order { background: var(–surface2); border: 1px solid var(–border); border-radius: 8px; padding: 9px 11px; margin-bottom: 6px; cursor: pointer; transition: border-color .12s; }
+.hist-order:hover { border-color: var(–accent); }
+.hist-order-header { display: flex; justify-content: space-between; align-items: center; }
+.hist-order-num { font-size: .72rem; font-weight: 700; color: var(–muted); }
+.hist-order-time { font-family: ‘DM Mono’, monospace; font-size: .68rem; color: var(–muted); }
+.hist-order-total { font-family: ‘DM Mono’, monospace; font-size: .85rem; color: var(–accent2); font-weight: 500; }
+.hist-order-items { margin-top: 7px; display: none; border-top: 1px solid var(–border); padding-top: 7px; }
+.hist-order.open .hist-order-items { display: block; }
+.hist-order-item { font-size: .72rem; color: var(–muted); padding: 2px 0; display: flex; justify-content: space-between; }
+.hist-order-item span:last-child { font-family: ‘DM Mono’, monospace; color: var(–text); }
 
-  .hist-footer { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
-  .hist-footer-btn { flex: 1; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Syne', sans-serif; font-weight: 600; font-size: .74rem; padding: 8px; border-radius: 8px; cursor: pointer; transition: all .15s; }
-  .hist-footer-btn:hover { border-color: var(--accent); color: var(--accent); }
+.hist-footer { padding: 12px 16px; border-top: 1px solid var(–border); display: flex; gap: 8px; }
+.hist-footer-btn { flex: 1; background: var(–surface2); border: 1px solid var(–border); color: var(–text); font-family: ‘Syne’, sans-serif; font-weight: 600; font-size: .74rem; padding: 8px; border-radius: 8px; cursor: pointer; transition: all .15s; }
+.hist-footer-btn:hover { border-color: var(–accent); color: var(–accent); }
 
-  /* Modal cobrar */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.78); z-index: 200; align-items: center; justify-content: center; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; width: 310px; animation: popIn .16s ease; }
-  @keyframes popIn { from { transform: scale(.92); opacity:0; } }
-  .modal h3 { font-size: 1rem; font-weight: 700; margin-bottom: 14px; }
-  .cobro-items { margin-bottom: 14px; max-height: 200px; overflow-y: auto; }
-  .cobro-item { display: flex; justify-content: space-between; font-size: .78rem; padding: 5px 0; border-bottom: 1px solid var(--border); color: var(--muted); }
-  .cobro-item:last-child { border: none; }
-  .cobro-item span:last-child { font-family: 'DM Mono', monospace; color: var(--text); }
-  .cobro-total { background: var(--surface2); border-radius: 8px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
-  .cobro-total-label { font-size: .8rem; font-weight: 700; }
-  .cobro-total-value { font-family: 'DM Mono', monospace; font-size: 1.4rem; color: var(--accent); font-weight: 500; }
-  .modal-actions { display: flex; gap: 8px; }
-  .btn-cancel { flex: 1; background: none; border: 1px solid var(--border); color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 600; font-size: .8rem; padding: 10px; border-radius: 8px; cursor: pointer; }
-  .btn-cancel:hover { color: var(--text); border-color: var(--muted); }
-  .btn-confirm { flex: 2; background: var(--accent2); border: none; color: #000; font-family: 'Syne', sans-serif; font-weight: 800; font-size: .85rem; padding: 10px; border-radius: 8px; cursor: pointer; }
-  .btn-confirm:hover { opacity: .88; }
+/* Modal cobrar */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.78); z-index: 200; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(–surface); border: 1px solid var(–border); border-radius: 14px; padding: 24px; width: 310px; animation: popIn .16s ease; }
+@keyframes popIn { from { transform: scale(.92); opacity:0; } }
+.modal h3 { font-size: 1rem; font-weight: 700; margin-bottom: 14px; }
+.cobro-items { margin-bottom: 14px; max-height: 200px; overflow-y: auto; }
+.cobro-item { display: flex; justify-content: space-between; font-size: .78rem; padding: 5px 0; border-bottom: 1px solid var(–border); color: var(–muted); }
+.cobro-item:last-child { border: none; }
+.cobro-item span:last-child { font-family: ‘DM Mono’, monospace; color: var(–text); }
+.cobro-total { background: var(–surface2); border-radius: 8px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.cobro-total-label { font-size: .8rem; font-weight: 700; }
+.cobro-total-value { font-family: ‘DM Mono’, monospace; font-size: 1.4rem; color: var(–accent); font-weight: 500; }
+.modal-actions { display: flex; gap: 8px; }
+.btn-cancel { flex: 1; background: none; border: 1px solid var(–border); color: var(–muted); font-family: ‘Syne’, sans-serif; font-weight: 600; font-size: .8rem; padding: 10px; border-radius: 8px; cursor: pointer; }
+.btn-cancel:hover { color: var(–text); border-color: var(–muted); }
+.btn-confirm { flex: 2; background: var(–accent2); border: none; color: #000; font-family: ‘Syne’, sans-serif; font-weight: 800; font-size: .85rem; padding: 10px; border-radius: 8px; cursor: pointer; }
+.btn-confirm:hover { opacity: .88; }
 
-  /* Modal stock */
-  .reset-list-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border); }
-  .reset-list-item span { font-size: .79rem; font-weight: 600; }
-  .reset-input { width: 60px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 4px 8px; font-family: 'DM Mono', monospace; font-size: .8rem; text-align: center; }
+/* Modal stock */
+.reset-list-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(–border); }
+.reset-list-item span { font-size: .79rem; font-weight: 600; }
+.reset-input { width: 60px; background: var(–surface2); border: 1px solid var(–border); color: var(–text); border-radius: 6px; padding: 4px 8px; font-family: ‘DM Mono’, monospace; font-size: .8rem; text-align: center; }
 
-  @media (max-width: 720px) {
-    .container { grid-template-columns: 1fr; }
-    .cart-panel { position: static; max-height: none; }
-  }
-  /* Payment modal extras */
-  .pay-method-btn { flex:1; padding:14px 10px; border-radius:10px; border:2px solid var(--border); background:var(--surface2); color:var(--text); font-family:"Syne",sans-serif; font-weight:700; font-size:.88rem; cursor:pointer; transition:all .15s; }
-  .pay-method-btn:hover { border-color:var(--accent2); color:var(--accent2); }
-  .pay-method-btn.nequi:hover { border-color:#a855f7; color:#a855f7; }
-  .billetes-grid { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:12px; }
-  .billete-btn { padding:7px 12px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--text); font-family:"DM Mono",monospace; font-size:.8rem; font-weight:500; cursor:pointer; transition:all .15s; }
-  .billete-btn:hover, .billete-btn.selected { background:var(--accent); color:#000; border-color:var(--accent); }
-  .cambio-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border); font-size:.8rem; color:var(--muted); }
-  .cambio-row:last-child { border:none; }
-  .cambio-highlight { background:rgba(74,222,128,.08); border-radius:6px; padding:8px 6px; margin-top:4px; color:var(--accent2); font-weight:700; }
+@media (max-width: 720px) {
+.container { grid-template-columns: 1fr; }
+.cart-panel { position: static; max-height: none; }
+}
+/* Payment modal extras */
+.pay-method-btn { flex:1; padding:14px 10px; border-radius:10px; border:2px solid var(–border); background:var(–surface2); color:var(–text); font-family:“Syne”,sans-serif; font-weight:700; font-size:.88rem; cursor:pointer; transition:all .15s; }
+.pay-method-btn:hover { border-color:var(–accent2); color:var(–accent2); }
+.pay-method-btn.nequi:hover { border-color:#a855f7; color:#a855f7; }
+.billetes-grid { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:12px; }
+.billete-btn { padding:7px 12px; border-radius:8px; border:1px solid var(–border); background:var(–surface2); color:var(–text); font-family:“DM Mono”,monospace; font-size:.8rem; font-weight:500; cursor:pointer; transition:all .15s; }
+.billete-btn:hover, .billete-btn.selected { background:var(–accent); color:#000; border-color:var(–accent); }
+.cambio-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(–border); font-size:.8rem; color:var(–muted); }
+.cambio-row:last-child { border:none; }
+.cambio-highlight { background:rgba(74,222,128,.08); border-radius:6px; padding:8px 6px; margin-top:4px; color:var(–accent2); font-weight:700; }
 </style>
+
 </head>
 <body>
 
@@ -207,41 +209,46 @@
   </div>
 
   <!-- CARRITO + HISTORIAL -->
+
   <div class="cart-panel">
     <div class="cart-tabs">
       <button class="tab-btn active" onclick="switchTab('carrito',this)">🛒 Pedido actual</button>
       <button class="tab-btn" onclick="switchTab('historial',this)">📅 Historial</button>
     </div>
 
-    <!-- TAB CARRITO -->
-    <div class="tab-content active" id="tab-carrito">
-      <div class="cart-header-info">
-        <span id="cartCount">0 productos</span>
-        <button class="cart-clear-btn" onclick="clearCart()">✕ Vaciar</button>
-      </div>
-      <div class="cart-items" id="cartItems">
-        <div class="cart-empty"><div class="icon">🛒</div>Toca productos para<br>armar el pedido</div>
-      </div>
-      <div class="cart-footer">
-        <div class="cart-subtotal">
-          <span class="cart-subtotal-label">TOTAL A COBRAR</span>
-          <span class="cart-subtotal-value" id="cartTotal">$0</span>
-        </div>
-        <button class="cobrar-btn" id="cobrarBtn" onclick="openCobrarModal()" disabled>Cobrar</button>
-      </div>
+```
+<!-- TAB CARRITO -->
+<div class="tab-content active" id="tab-carrito">
+  <div class="cart-header-info">
+    <span id="cartCount">0 productos</span>
+    <button class="cart-clear-btn" onclick="clearCart()">✕ Vaciar</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty"><div class="icon">🛒</div>Toca productos para<br>armar el pedido</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-subtotal">
+      <span class="cart-subtotal-label">TOTAL A COBRAR</span>
+      <span class="cart-subtotal-value" id="cartTotal">$0</span>
     </div>
+    <button class="cobrar-btn" id="cobrarBtn" onclick="openCobrarModal()" disabled>Cobrar</button>
+  </div>
+</div>
 
-    <!-- TAB HISTORIAL -->
-    <div class="tab-content" id="tab-historial">
-      <div class="hist-list" id="histList"></div>
-      <div class="hist-footer">
-        <button class="hist-footer-btn" onclick="exportCSV()">⬇ Exportar CSV</button>
-      </div>
-    </div>
+<!-- TAB HISTORIAL -->
+<div class="tab-content" id="tab-historial">
+  <div class="hist-list" id="histList"></div>
+  <div class="hist-footer">
+    <button class="hist-footer-btn" onclick="exportCSV()">⬇ Exportar CSV</button>
+  </div>
+</div>
+```
+
   </div>
 </div>
 
 <!-- Modal pago -->
+
 <div class="modal-overlay" id="cobrarOverlay" onclick="closeCobrarModal(event)">
   <div class="modal" style="width:340px">
     <h3 style="margin-bottom:12px">💳 Cobrar pedido</h3>
@@ -251,45 +258,49 @@
       <span class="cobro-total-value" id="cobroTotal">$0</span>
     </div>
 
-    <!-- Step 1: método -->
-    <div id="stepMetodo">
-      <div style="display:flex;gap:10px;margin-bottom:8px">
-        <button class="pay-method-btn" onclick="selectMetodo('efectivo')">💵 Efectivo</button>
-        <button class="pay-method-btn nequi" onclick="selectMetodo('nequi')">🟣 Nequi</button>
-      </div>
-      <button class="btn-cancel" style="width:100%" onclick="closeCobrarModal()">Cancelar</button>
-    </div>
+```
+<!-- Step 1: método -->
+<div id="stepMetodo">
+  <div style="display:flex;gap:10px;margin-bottom:8px">
+    <button class="pay-method-btn" onclick="selectMetodo('efectivo')">💵 Efectivo</button>
+    <button class="pay-method-btn nequi" onclick="selectMetodo('nequi')">🟣 Nequi</button>
+  </div>
+  <button class="btn-cancel" style="width:100%" onclick="closeCobrarModal()">Cancelar</button>
+</div>
 
-    <!-- Step 2: efectivo -->
-    <div id="stepEfectivo" style="display:none">
-      <p style="font-size:.72rem;color:var(--muted);margin-bottom:10px">¿Con cuánto paga el cliente?</p>
-      <div class="billetes-grid" id="billetesGrid"></div>
-      <div id="cambioBox" style="display:none;background:var(--surface2);border-radius:8px;padding:10px 12px;margin-bottom:4px">
-        <div class="cambio-row"><span>Paga con</span><span id="pagaCon">$0</span></div>
-        <div class="cambio-row"><span>Total</span><span id="cambioTotal2">$0</span></div>
-        <div class="cambio-row cambio-highlight"><span>Cambio</span><span id="cambioValor">$0</span></div>
-      </div>
-      <div class="modal-actions" style="margin-top:10px">
-        <button class="btn-cancel" onclick="backToMetodo()">← Volver</button>
-        <button class="btn-confirm" id="btnConfirmEfectivo" onclick="confirmarCobro('efectivo')" disabled>✓ Confirmar</button>
-      </div>
-    </div>
+<!-- Step 2: efectivo -->
+<div id="stepEfectivo" style="display:none">
+  <p style="font-size:.72rem;color:var(--muted);margin-bottom:10px">¿Con cuánto paga el cliente?</p>
+  <div class="billetes-grid" id="billetesGrid"></div>
+  <div id="cambioBox" style="display:none;background:var(--surface2);border-radius:8px;padding:10px 12px;margin-bottom:4px">
+    <div class="cambio-row"><span>Paga con</span><span id="pagaCon">$0</span></div>
+    <div class="cambio-row"><span>Total</span><span id="cambioTotal2">$0</span></div>
+    <div class="cambio-row cambio-highlight"><span>Cambio</span><span id="cambioValor">$0</span></div>
+  </div>
+  <div class="modal-actions" style="margin-top:10px">
+    <button class="btn-cancel" onclick="backToMetodo()">← Volver</button>
+    <button class="btn-confirm" id="btnConfirmEfectivo" onclick="confirmarCobro('efectivo')" disabled>✓ Confirmar</button>
+  </div>
+</div>
 
-    <!-- Step 2: nequi -->
-    <div id="stepNequi" style="display:none">
-      <div style="text-align:center;padding:14px 0 18px">
-        <div style="font-size:2rem;margin-bottom:8px">🟣</div>
-        <div style="font-size:.82rem;color:var(--muted)">Registrar pago por Nequi</div>
-      </div>
-      <div class="modal-actions">
-        <button class="btn-cancel" onclick="backToMetodo()">← Volver</button>
-        <button class="btn-confirm" onclick="confirmarCobro('nequi')">✓ Confirmar</button>
-      </div>
-    </div>
+<!-- Step 2: nequi -->
+<div id="stepNequi" style="display:none">
+  <div style="text-align:center;padding:14px 0 18px">
+    <div style="font-size:2rem;margin-bottom:8px">🟣</div>
+    <div style="font-size:.82rem;color:var(--muted)">Registrar pago por Nequi</div>
+  </div>
+  <div class="modal-actions">
+    <button class="btn-cancel" onclick="backToMetodo()">← Volver</button>
+    <button class="btn-confirm" onclick="confirmarCobro('nequi')">✓ Confirmar</button>
+  </div>
+</div>
+```
+
   </div>
 </div>
 
 <!-- Modal ajustar stock -->
+
 <div class="modal-overlay" id="resetOverlay" onclick="closeReset(event)">
   <div class="modal" style="width:340px">
     <h3 style="margin-bottom:8px">⚙ Ajustar Stock</h3>
@@ -321,9 +332,10 @@ const PRODUCTOS = [
   { id:8,  nombre:"Galletas MU",       costo:5490,  cantPkg:18, venta:800  },
   { id:11, nombre:"Bombón Bum",        costo:3700,  cantPkg:6,  venta:800  },
   { id:16, nombre:"Paquetes (papas)",  costo:0,     cantPkg:36, venta:2000 },
+  { id:17, nombre:"Corazón de Hojaldre", costo:0,     cantPkg:0,  venta:800  },
 ];
 
-const STOCK_INICIAL = {1:30,2:12,3:4,4:4,5:18,6:24,7:18,8:18,9:12,10:6,11:18,12:12,13:0,14:0,15:0,16:36};
+const STOCK_INICIAL = {1:30,2:12,3:4,4:4,5:18,6:24,7:18,8:18,9:12,10:6,11:18,12:12,13:0,14:0,15:0,16:36,17:50};
 const _now = new Date();
 const TODAY = _now.getFullYear() + '-' + String(_now.getMonth()+1).padStart(2,'0') + '-' + String(_now.getDate()).padStart(2,'0');
 const fmt = n => '$' + Math.round(n).toLocaleString('es-CO');
@@ -693,5 +705,6 @@ renderCart();
 updateStats();
 checkAlerts();
 </script>
+
 </body>
 </html>
