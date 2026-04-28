@@ -40,22 +40,22 @@ header h1 span { color: var(–text); font-weight: 400; }
 .filter-bar { display: flex; gap: 7px; margin-bottom: 16px; flex-wrap: wrap; }
 .filter-btn { background: var(–surface2); border: 1px solid var(–border); color: var(–muted); font-family: ‘Syne’, sans-serif; font-size: .72rem; font-weight: 600; padding: 4px 11px; border-radius: 20px; cursor: pointer; transition: all .15s; }
 .filter-btn.active, .filter-btn:hover { background: var(–accent); color: #000; border-color: var(–accent); }
-.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 11px; }
+.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 11px; align-items: start; }
 
-.product-card { background: var(–surface); border: 1px solid var(–border); border-radius: 10px; padding: 12px; cursor: pointer; transition: transform .12s, border-color .12s, box-shadow .12s; position: relative; overflow: hidden; user-select: none; }
+.product-card { background: var(–surface); border: 1px solid var(–border); border-radius: 12px; padding: 16px 14px; cursor: pointer; transition: transform .12s, border-color .12s, box-shadow .12s; position: relative; overflow: hidden; user-select: none; aspect-ratio: 1 / 1; display: flex; flex-direction: column; justify-content: space-between; }
 .product-card:hover { transform: translateY(-2px); border-color: var(–accent); box-shadow: 0 4px 18px rgba(240,192,64,.12); }
 .product-card:active { transform: scale(.97); }
 .product-card.low-stock { border-color: var(–warn); }
 .product-card.out-stock { border-color: var(–danger); opacity: .5; pointer-events: none; }
 .product-card.in-cart { border-color: var(–accent2); background: rgba(74,222,128,.06); }
 
-.card-name { font-size: .82rem; font-weight: 700; margin-bottom: 5px; line-height: 1.3; }
-.card-sale-price { font-family: ‘DM Mono’, monospace; font-size: .86rem; color: var(–accent2); font-weight: 500; margin-bottom: 2px; }
+.card-name { font-size: 1rem; font-weight: 800; margin-bottom: 8px; line-height: 1.25; }
+.card-sale-price { font-family: ‘DM Mono’, monospace; font-size: 1.1rem; color: var(–accent2); font-weight: 500; margin-bottom: 10px; }
 .card-cost-price { font-family: ‘DM Mono’, monospace; font-size: .66rem; color: var(–muted); margin-bottom: 7px; }
-.card-stock-bar { height: 3px; background: var(–surface2); border-radius: 2px; overflow: hidden; }
+.card-stock-bar { height: 4px; background: var(–surface2); border-radius: 2px; overflow: hidden; }
 .card-stock-fill { height: 100%; border-radius: 2px; transition: width .3s; }
 .card-stock-info { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
-.stock-count { font-family: ‘DM Mono’, monospace; font-size: .66rem; color: var(–muted); }
+.stock-count { font-family: ‘DM Mono’, monospace; font-size: .78rem; color: var(–muted); font-weight: 500; }
 .stock-badge { font-size: .57rem; font-weight: 700; padding: 2px 5px; border-radius: 4px; text-transform: uppercase; }
 .badge-ok  { background: rgba(74,222,128,.15); color: var(–accent2); }
 .badge-low { background: rgba(251,146,60,.15); color: var(–warn); }
@@ -318,20 +318,16 @@ const PRODUCTOS = [
   // ── MÁS VENDIDOS ──
   { id:12, nombre:"Sandwiches",        costo:0,     cantPkg:12, venta:3000, top:true },
   { id:7,  nombre:"Jugo Hit",          costo:6300,  cantPkg:6,  venta:2000, top:true },
-  { id:10, nombre:"Gancitos",          costo:11490, cantPkg:6,  venta:2500, top:true },
   { id:14, nombre:"Todo Rico",         costo:0,     cantPkg:0,  venta:3000, top:true },
   { id:13, nombre:"Doritos",           costo:0,     cantPkg:0,  venta:3000, top:true },
   { id:15, nombre:"Papas Margarita",   costo:0,     cantPkg:0,  venta:2500, top:true },
   { id:6,  nombre:"Agua Cristal",      costo:14000, cantPkg:24, venta:1000, top:true },
-  { id:2,  nombre:"Burbujas",          costo:11990, cantPkg:12, venta:1200, top:true },
   // ── OTROS ──
   { id:1,  nombre:"Barriletes",        costo:4390,  cantPkg:15, venta:600  },
-  { id:3,  nombre:"Chocorramo Miti",   costo:7900,  cantPkg:4,  venta:2000 },
   { id:4,  nombre:"Chocorramo Mini",   costo:7900,  cantPkg:4,  venta:1500 },
   { id:5,  nombre:"Club Social",       costo:4500,  cantPkg:6,  venta:1500 },
   { id:8,  nombre:"Galletas MU",       costo:5490,  cantPkg:18, venta:800  },
   { id:11, nombre:"Bombón Bum",        costo:3700,  cantPkg:6,  venta:800  },
-  { id:16, nombre:"Paquetes (papas)",  costo:0,     cantPkg:36, venta:2000 },
   { id:17, nombre:"Corazón de Hojaldre", costo:0,     cantPkg:0,  venta:800  },
 ];
 
