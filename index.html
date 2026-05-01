@@ -685,6 +685,46 @@ function saveStock() {
 }
 
 // ── EXPORTAR CSV ──────────────────────────────────────────
+function csvDeDia(fecha, ordenes) {
+  const [y,m,d] = fecha.split('-');
+  let csv = 'VENTAS DEL ' + d + '/' + m + '/' + y + '\n';
+  csv += 'Pedido,Hora,Metodo,Producto,Cantidad,Precio,Subtotal\n';
+  ordenes.forEach(o => {
+    o.items.forEach(i => {
+      csv += '#' + o.num + ',' + o.hora + ',' + (o.metodo||'—') + ',"' + i.nombre + '",' + i.qty + ',' + i.venta + ',' + i.subtotal + '\n';
+    });
+  });
+  const total = ordenes.reduce((a,o)=>a+o.total,0);
+  const nequi = ordenes.filter(o=>o.metodo==='nequi').reduce((a,o)=>a+o.total,0);
+  const efectivo = ordenes.filter(o=>o.metodo==='efectivo').reduce((a,o)=>a+o.total,0);
+  csv += '\nRESUMEN\n';
+  csv += 'Total ventas,,,,,,' + total + '\n';
+  csv += 'Efectivo,,,,,,' + efectivo + '\n';
+  csv += 'Nequi,,,,,,' + nequi + '\n';
+  return csv;
+}
+
+function exportDia() {
+  const sel = document.getElementById("daySelector").value;
+  if (!sel) { alert("Selecciona un día primero."); return; }
+  const ordenes = history[sel] || [];
+  if (!ordenes.length) { alert("No hay ventas ese día."); return; }
+  const csv = csvDeDia(sel, ordenes);
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8;"}));
+  a.download = "ventas_" + sel + ".csv"; a.click();
+}
+
+function exportSemana() {
+  const dias = Object.keys(history).filter(d => history[d]&&history[d].length).sort();
+  if (!dias.length) { alert("No hay ventas registradas."); return; }
+  let csv = "";
+  dias.forEach(d => { csv += csvDeDia(d, history[d]); csv += '\n\n'; });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8;"}));
+  a.download = "ventas_semana.csv"; a.click();
+}
+
 function exportCSV() {
   const hoy = history[TODAY] || [];
   if (!hoy.length) { alert('No hay pedidos hoy.'); return; }
