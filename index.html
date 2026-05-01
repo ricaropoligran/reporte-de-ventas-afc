@@ -317,7 +317,7 @@ const PRODUCTOS = [
   { id:5,  nombre:"Club Social",       costo:4500,  cantPkg:6,  venta:1500 },
   { id:8,  nombre:"Galletas MU",       costo:5490,  cantPkg:18, venta:800  },
   { id:11, nombre:"Bombón Bum",        costo:3700,  cantPkg:6,  venta:800  },
-  { id:16, nombre:"Paquetes (papas)",  costo:0,     cantPkg:36, venta:2000 },
+  { id:16, nombre:"Brazo de Reina",     costo:0,     cantPkg:0,  venta:2500 },
   { id:17, nombre:"Corazón de Hojaldre", costo:0,     cantPkg:0,  venta:800  },
 ];
 
@@ -584,6 +584,19 @@ function renderHistorial() {
   if (!days.length || days.every(d => !history[d].length)) {
     container.innerHTML = `<div class="cart-empty"><div class="icon">📅</div>No hay pedidos aún</div>`;
     return;
+  }
+
+  // Populate day selector
+  const sel = document.getElementById('daySelector');
+  if (sel) {
+    sel.innerHTML = '<option value="">Seleccionar día...</option>';
+    days.filter(d => history[d]?.length).forEach(d => {
+      const [y,m,day] = d.split('-');
+      const opt = document.createElement('option');
+      opt.value = d;
+      opt.textContent = d === TODAY ? `Hoy (${day}/${m}/${y})` : `${day}/${m}/${y}`;
+      sel.appendChild(opt);
+    });
   }
 
   container.innerHTML = days.filter(d => history[d]?.length).map(d => {
