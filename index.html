@@ -234,8 +234,14 @@
     <!-- TAB HISTORIAL -->
     <div class="tab-content" id="tab-historial">
       <div class="hist-list" id="histList"></div>
-      <div class="hist-footer">
-        <button class="hist-footer-btn" onclick="exportCSV()">⬇ Exportar CSV</button>
+      <div class="hist-footer" style="flex-direction:column;gap:8px">
+        <div style="display:flex;gap:8px;align-items:center">
+          <select id="daySelector" style="flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 10px;font-family:'Syne',sans-serif;font-size:.74rem;cursor:pointer">
+            <option value="">Seleccionar día...</option>
+          </select>
+          <button class="hist-footer-btn" style="flex:none;padding:8px 12px" onclick="exportDia()">⬇ Día</button>
+        </div>
+        <button class="hist-footer-btn" onclick="exportSemana()">⬇ Exportar semana completa</button>
       </div>
     </div>
   </div>
